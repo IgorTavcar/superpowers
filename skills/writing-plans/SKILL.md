@@ -33,6 +33,16 @@ Filename rules (to avoid tool/path errors across macOS/Linux/Windows):
 - "Run the tests and make sure they pass" - step
 - "Commit" - step
 
+## Output Budget Guardrails
+
+To avoid oversized responses and token overflows:
+
+- Keep plans concise: target **~120 lines max** (excluding blank lines/code fences)
+- Cap at **10 tasks per response**
+- If work is larger, split into phases and only output **Phase 1**
+- Prefer short, high-signal snippets (5-15 lines) instead of full-file dumps
+- For repetitive tasks, provide one concrete example then reference the same pattern for remaining tasks
+
 ## Plan Document Header
 
 **Every plan MUST start with this header:**
@@ -117,7 +127,7 @@ Allowed exceptions (must be explicitly justified in the plan):
 
 ## Remember
 - Exact file paths always
-- Complete code in plan (not "add validation")
+- Include concrete snippets and commands, but avoid full-file dumps unless truly necessary
 - Exact commands with expected output
 - Reference relevant skills with @ syntax
 - DRY, YAGNI, strict TDD order, frequent commits
