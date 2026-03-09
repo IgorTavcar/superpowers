@@ -87,6 +87,7 @@ digraph brainstorming {
 
 **Documentation:**
 - Write the validated design to `docs/plans/YYYY-MM-DD-<topic>-design.md`
+- Design docs describe **what** and **why**, not **how** — no code blocks, no implementation details. Code belongs in the implementation plan.
 - Use elements-of-style:writing-clearly-and-concisely skill if available
 - Commit the design document to git
 
