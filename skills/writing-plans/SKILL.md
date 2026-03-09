@@ -15,7 +15,7 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 **Context:** This should be run in a dedicated worktree (created by brainstorming skill).
 
-**Save plans to:** `docs/plans/YYYY-MM-DD-feature-name.md`
+**Save plans to:** `docs/plans/YYYY-MM-DD-feature-name-plan.md` (never overwrite `*-design.md`)
 
 Filename rules (to avoid tool/path errors across macOS/Linux/Windows):
 - Replace `feature-name` with a real lowercase slug (e.g., `oauth-login`, `invoice-export`)
