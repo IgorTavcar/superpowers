@@ -95,10 +95,12 @@ git push -u origin <feature-branch>
 # Verify push succeeded
 git log origin/<feature-branch> -1 --oneline
 
-# Create PR
+# Create PR — check if work resolves a tracked issue
 gh pr create --title "<title>" --body "$(cat <<'EOF'
 ## Summary
 <2-3 bullets of what changed>
+
+Closes #<issue-number>
 
 ## Test Plan
 - [ ] <verification steps>
@@ -197,6 +199,7 @@ git worktree remove <worktree-path>
 - Get typed confirmation for Option 4
 - Clean up worktree for Options 1 & 4 only
 - Confirm PR was created with `gh pr view` after Option 2
+- Check if work resolves a tracked GitHub issue and include `Closes #<number>` in PR body
 
 ## Integration
 

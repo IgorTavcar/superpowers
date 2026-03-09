@@ -88,4 +88,5 @@ Task tool (general-purpose):
     - Files changed
     - Self-review findings (if any)
     - Any issues or concerns
+    - **Discoveries:** Codebase quirks, gotchas, conventions, or patterns you encountered that future tasks should know about
 ```

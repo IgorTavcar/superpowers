@@ -195,6 +195,18 @@ Keep tests green. Don't add behavior.
 
 Next failing test for next feature.
 
+## Boundary Coverage
+
+Test at the boundaries first — that's where bugs live:
+
+- **Zero/empty:** 0, `""`, `[]`, `null`, `undefined`
+- **One:** single element, single character
+- **Limits:** max-1, max, max+1
+- **Type edges:** negative numbers, very large numbers, special characters
+- **State transitions:** empty→non-empty, under-limit→at-limit→over-limit
+
+Write a boundary test before the happy path. If a function takes a count, test 0 and the maximum before testing 5.
+
 ## Good Tests
 
 | Quality | Good | Bad |

@@ -133,6 +133,17 @@ Allowed exceptions (must be explicitly justified in the plan):
 - DRY, YAGNI, strict TDD order, frequent commits
 - Reject and rewrite any plan that violates failing-test-first
 
+## Design-Plan Alignment Check
+
+Before saving the plan, verify alignment with the design doc (if one exists):
+
+1. **Read the design doc** — open `docs/plans/*-design.md` for this feature
+2. **Check coverage** — every requirement in the design must map to at least one plan task
+3. **Check scope** — no plan task should implement something not in the design (no feature creep)
+4. **List the mapping** — briefly note which design requirement each task covers
+
+If you find gaps (design requirements with no corresponding task), add tasks. If you find extras (tasks that implement unrequested functionality), remove them.
+
 ## Execution Handoff
 
 After saving the plan, offer execution choice:

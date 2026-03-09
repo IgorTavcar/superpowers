@@ -70,6 +70,7 @@ digraph brainstorming {
 - Only one question per message - if a topic needs more exploration, break it into multiple questions
 - Focus on understanding: purpose, constraints, success criteria
 - **Always ask about scale** - Expected volume (transactions/sec, records, users, messages, requests) is a critical architectural driver. The answer fundamentally shapes storage, architecture, queueing, and cost decisions. Ask early.
+- **Challenge assumptions** - Don't accept the user's framing uncritically. Ask: Who is this actually for? Is there a simpler way to achieve the same goal? Does the premise hold at scale? What existing solution was rejected, and why? Proactively surface hidden assumptions before they become architectural commitments.
 
 **Exploring approaches:**
 - Propose 2-3 different approaches with trade-offs

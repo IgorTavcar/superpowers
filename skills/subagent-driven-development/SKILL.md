@@ -127,6 +127,28 @@ These thoughts mean STOP — you are about to skip a required review:
 | "I'll review them all at the end"            | Per-task review catches issues early            |
 | "Almost done, let me just finish up"         | "Almost done" is when corners get cut most      |
 
+## Accumulated Discoveries
+
+As subagents work, they discover codebase quirks, gotchas, and patterns that later subagents need to know. The controller MUST maintain a running discoveries list.
+
+**After each task completes**, extract discoveries from the implementer and reviewer reports:
+- Unexpected codebase conventions (e.g., "this project uses barrel exports")
+- Gotchas encountered (e.g., "tests require `DATABASE_URL` env var")
+- Patterns to follow (e.g., "all API handlers use the `withAuth` wrapper")
+- Dependencies between areas (e.g., "changing schema requires regenerating types")
+
+**When dispatching subsequent subagents**, include accumulated discoveries in the prompt:
+
+```
+## Discoveries from Previous Tasks
+
+- [discovery 1 from Task N]
+- [discovery 2 from Task N+1]
+...
+```
+
+This prevents later subagents from repeating mistakes or rediscovering what earlier subagents already learned.
+
 ## Prompt Templates
 
 - `./implementer-prompt.md` - Dispatch implementation role via Task tool (`general-purpose`)

@@ -57,9 +57,14 @@ Each domain is independent - fixing tool approval doesn't affect abort tests.
 
 Each agent gets:
 - **Specific scope:** One test file or subsystem
-- **Clear goal:** Make these tests pass
+- **Clear goal:** Make these tests pass (imperative, not descriptive)
+- **Autonomy level:** Explicitly state what the agent may do without asking (e.g., "You have full autonomy to edit files, run tests, and commit within this scope")
 - **Constraints:** Don't change other code
 - **Expected output:** Summary of what you found and fixed
+
+**Imperative framing matters.** Agents freeze when given architectural descriptions ("the system uses X pattern") without clear action items. Frame tasks as checklists:
+- "Do X, then Y, then Z" — not "X needs to be done"
+- "Edit file A to fix B" — not "File A has a problem with B"
 
 ### 3. Dispatch in Parallel
 
