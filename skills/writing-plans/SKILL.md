@@ -50,7 +50,7 @@ To avoid oversized responses and token overflows:
 ```markdown
 # [Feature Name] Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:refining-plans to pressure-test this plan, then superpowers:executing-plans to implement task-by-task.
 
 **Goal:** [One sentence describing what this builds]
 
@@ -137,19 +137,17 @@ Allowed exceptions (must be explicitly justified in the plan):
 
 After saving the plan, offer execution choice:
 
-**"Plan complete and saved to `docs/plans/<filename>.md`. Two execution options:**
+**"Plan complete and saved to `docs/plans/<filename>.md`. Three options:**
 
-**1. Subagent-Driven (this session)** - I dispatch fresh subagent per task, review between tasks, fast iteration
+**1. Refine first** — Pressure-test plan before execution, catch gaps early
+- **REQUIRED SUB-SKILL:** Use superpowers:refining-plans
 
-**2. Parallel Session (separate)** - Open new session with executing-plans, batch execution with checkpoints
-
-**Which approach?"**
-
-**If Subagent-Driven chosen:**
+**2. Subagent-Driven (this session)** — Skip refinement, fresh subagent per task, review between tasks
 - **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
 - Stay in this session
 - Fresh subagent per task + code review
 
-**If Parallel Session chosen:**
-- Guide them to open new session in worktree
+**3. Parallel Session (separate)** — Skip refinement, batch execution with checkpoints
 - **REQUIRED SUB-SKILL:** New session uses superpowers:executing-plans
+
+**Which approach?"**
