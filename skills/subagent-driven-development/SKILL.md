@@ -97,57 +97,38 @@ digraph process {
 }
 ```
 
-## Completion Gate (Mandatory Per Task)
+## Model Selection
 
-Before marking ANY task complete, verify ALL of these are true:
+Use the least powerful model that can handle each role to conserve cost and increase speed.
 
-```text
-□ Implementer subagent dispatched and completed
-□ Spec reviewer subagent dispatched → result was ✅
-□ Code quality reviewer subagent dispatched → result was ✅
-□ Any issues found by reviewers were fixed AND re-reviewed
-```
+**Mechanical implementation tasks** (isolated functions, clear specs, 1-2 files): use a fast, cheap model. Most implementation tasks are mechanical when the plan is well-specified.
 
-**If ANY box is unchecked → DO NOT mark task complete.**
-**"Going faster" by skipping reviews = going slower (rework later).**
-**This gate applies to every task. No exceptions. ESPECIALLY the last tasks.**
+**Integration and judgment tasks** (multi-file coordination, pattern matching, debugging): use a standard model.
 
-## Rationalization Prevention
+**Architecture, design, and review tasks**: use the most capable available model.
 
-These thoughts mean STOP — you are about to skip a required review:
+**Task complexity signals:**
+- Touches 1-2 files with a complete spec → cheap model
+- Touches multiple files with integration concerns → standard model
+- Requires design judgment or broad codebase understanding → most capable model
 
-| Thought                                      | Reality                                         |
-| -------------------------------------------- | ----------------------------------------------- |
-| "I'll skip reviews to go faster"             | Skipping reviews = rework later = slower        |
-| "This task was simple, doesn't need review"  | ALL tasks get reviewed. No exceptions.          |
-| "Context is getting long, let me streamline" | Reviews are not optional streamlining           |
-| "I already reviewed it mentally"             | Mental review ≠ dispatched reviewer subagent    |
-| "Just for the last few tasks"                | ESPECIALLY the last tasks need reviews          |
-| "The implementer's self-review was thorough" | Self-review does not replace reviewer subagents |
-| "I'll review them all at the end"            | Per-task review catches issues early            |
-| "Almost done, let me just finish up"         | "Almost done" is when corners get cut most      |
+## Handling Implementer Status
 
-## Accumulated Discoveries
+Implementer subagents report one of four statuses. Handle each appropriately:
 
-As subagents work, they discover codebase quirks, gotchas, and patterns that later subagents need to know. The controller MUST maintain a running discoveries list.
+**DONE:** Proceed to spec compliance review.
 
-**After each task completes**, extract discoveries from the implementer and reviewer reports:
-- Unexpected codebase conventions (e.g., "this project uses barrel exports")
-- Gotchas encountered (e.g., "tests require `DATABASE_URL` env var")
-- Patterns to follow (e.g., "all API handlers use the `withAuth` wrapper")
-- Dependencies between areas (e.g., "changing schema requires regenerating types")
+**DONE_WITH_CONCERNS:** The implementer completed the work but flagged doubts. Read the concerns before proceeding. If the concerns are about correctness or scope, address them before review. If they're observations (e.g., "this file is getting large"), note them and proceed to review.
 
-**When dispatching subsequent subagents**, include accumulated discoveries in the prompt:
+**NEEDS_CONTEXT:** The implementer needs information that wasn't provided. Provide the missing context and re-dispatch.
 
-```
-## Discoveries from Previous Tasks
+**BLOCKED:** The implementer cannot complete the task. Assess the blocker:
+1. If it's a context problem, provide more context and re-dispatch with the same model
+2. If the task requires more reasoning, re-dispatch with a more capable model
+3. If the task is too large, break it into smaller pieces
+4. If the plan itself is wrong, escalate to the human
 
-- [discovery 1 from Task N]
-- [discovery 2 from Task N+1]
-...
-```
-
-This prevents later subagents from repeating mistakes or rediscovering what earlier subagents already learned.
+**Never** ignore an escalation or force the same model to retry without changes. If the implementer said it's stuck, something needs to change.
 
 ## Prompt Templates
 
@@ -162,7 +143,7 @@ In the examples below, `Implementer` is the role label for the implementation su
 ```
 You: I'm using Subagent-Driven Development to execute this plan.
 
-[Read plan file once: docs/plans/feature-plan.md]
+[Read plan file once: docs/superpowers/plans/feature-plan.md]
 [Extract all 5 tasks with full text and context]
 [Create TodoWrite with all tasks]
 
