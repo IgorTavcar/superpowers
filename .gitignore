@@ -4,5 +4,6 @@
 .DS_Store
 .idea/
 node_modules/
+!skills/brainstorming/scripts/node_modules/
 inspo
 triage/
