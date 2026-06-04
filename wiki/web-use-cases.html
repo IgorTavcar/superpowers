@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From the Web — Superpowers Wiki</title>
+<meta name="description" content="An honest, well-sourced survey of how the wider world received Superpowers: the raves, the skeptics, the token-cost caveat, the 94% slop-PR story, and the broader Agent Skills ecosystem.">
+<link rel="icon" href="assets/app-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="glyph"><img src="assets/logo.svg" alt=""></span>
+    <b>Superpowers</b>
+    <span class="tag">WIKI</span>
+  </a>
+  <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="essence.html">Essence</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="meta-programming.html">Meta-Programming</a>
+    <a href="methods.html">Methods</a>
+    <a href="brainstorming.html">Brainstorming</a>
+    <a href="examples.html">Examples</a>
+    <a href="use-cases.html">Use Cases</a>
+    <a href="web-use-cases.html">From the Web</a>
+  </nav>
+  <div class="header-right">
+    <a class="gh-link" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">On this page</div>
+      <a href="#reception">A divided, mostly-positive reception</a>
+      <a href="#raves">The raves</a>
+      <a href="#skeptics">The skeptics</a>
+      <a href="#token-cost">The overkill caveat</a>
+      <a href="#slop-prs">The 94% slop-PR story</a>
+      <a href="#stacking">Stacking it with other tools</a>
+      <a href="#ecosystem">Ecosystem context</a>
+      <a href="#tutorials">Tutorials &amp; walkthroughs</a>
+    </aside>
+    <div class="content">
+      <div class="hero">
+        <span class="eyebrow">Page 08 · The reception</span>
+        <h1 class="page-title">From the <span class="grad-text">Web</span></h1>
+        <p class="lede">Superpowers landed in October 2025 and almost immediately split the room. Experienced engineers wrote rave reviews; Hacker News sharpened its knives; and at scale the project surfaced an uncomfortable truth about agentic contribution. This page is the honest, sourced version — praise and skepticism, side by side, with a real URL behind nearly every claim.</p>
+      </div>
+
+      <section class="reveal">
+        <h2 id="reception">A divided, mostly-positive reception</h2>
+        <p class="section-intro">Among practitioners who actually ship code with coding agents, the verdict skews strongly positive. But the response is genuinely mixed — and the headline numbers you'll see quoted around the web do not agree with each other.</p>
+
+        <p>The pattern is consistent across sources: people who use Superpowers on real, multi-file work tend to love it, while people reacting to the <em>idea</em> of it — a Markdown framework that imposes "discipline" on a model — are more divided. The framework doesn't claim to make the model smarter; it claims to make it follow a process. Whether that's worth the ceremony depends entirely on what you're building.</p>
+
+        <div class="callout warn">
+          <div class="ic">!</div>
+          <p><strong>Numbers, unverified.</strong> Secondary sources cite wildly different popularity figures — 93,000, 120,000+, 150,000, and (via an AI reading of the GitHub page) 218k stars; the Claude Code Marketplace was separately reported as claiming ~300,000 installs, described as second only to Anthropic's first-party "frontend-design" plugin. These diverge enough that no single figure should be trusted. Treat every count on this page as approximate and unverified. The release referenced by this wiki is v5.1.0.</p>
+        </div>
+
+        <div class="grid cols-3">
+          <div class="card">
+            <div class="stat"><div class="num">93k–300k</div><div class="lbl">reported stars / installs (unverified, divergent)</div></div>
+          </div>
+          <div class="card">
+            <div class="stat"><div class="num">~14%</div><div class="lbl">token cut on complex tasks in one writeup — none on simple ones</div></div>
+          </div>
+          <div class="card">
+            <div class="stat"><div class="num">94%</div><div class="lbl">PR-rejection rate the creator documented at scale</div></div>
+          </div>
+        </div>
+
+        <div class="pull">The real bet under the noise: what coding agents lack isn't capability — it's <span>discipline</span>, and discipline can be shipped as plain Markdown.</div>
+      </section>
+
+      <section class="reveal">
+        <h2 id="raves">The raves</h2>
+        <p class="section-intro">The strongest endorsements come from independent developers with no affiliation to the project — people describing concrete wins on their own codebases.</p>
+
+        <blockquote>"Using Claude Code with Superpowers is so much more productive and the features it builds are so much more correct than with stock Claude Code."<cite>Evan Schwartz — "A Rave Review of Superpowers (for Claude Code)"</cite></blockquote>
+
+        <p>Schwartz's writeup walks the flow: brainstorming explores the codebase, presents multiple options with tradeoffs, sketches a roughly dozen-bullet plan, then writes an editable Markdown design doc you can comment on in your own editor. His favorite part is being able to weigh in on a concise outline rather than rewriting a multi-page default Plan-mode document.</p>
+
+        <p>Richard Porter reports the same reliability on large features. His plans break into 12–15 tasks of about 2–5 minutes each; before Superpowers he'd "describe the feature, hope Claude understood... watch it write code for 10 minutes, then spend an hour fixing the inconsistencies." After, features spanning 15+ files execute consistently with fewer regressions — because, as he puts it, "each subagent starts fresh with only the context it needs."</p>
+
+        <blockquote>"Claude literally cannot skip the planning phase or write code before tests."<cite>Richard Joseph Porter</cite></blockquote>
+
+        <p>Then there's Simon Willison, whose endorsement carries weight precisely because it's measured. He calls creator Jesse Vincent <strong>"one of the most creative users of coding agents (Claude Code in particular)"</strong> he knows, and "way ahead of the curve." Willison highlights the engineering taste behind it: the core is "VERY token light," pulling in one doc under 2k tokens; Vincent uses subagents "to manage token-heavy stuff," keeps a "feelings journal," runs red/green TDD, and is "wildly experimenting" with Graphviz DOT graphs as workflow instructions.</p>
+
+        <div class="grid cols-3">
+          <a class="source-card" href="https://emschwartz.me/a-rave-review-of-superpowers-for-claude-code/" target="_blank" rel="noopener">
+            <div class="src-t">A Rave Review of Superpowers</div>
+            <div class="src-u">emschwartz.me</div>
+            <div class="src-d">Evan Schwartz on why features come out "so much more correct."</div>
+          </a>
+          <a class="source-card" href="https://richardporter.dev/blog/superpowers-plugin-claude-code-big-features" target="_blank" rel="noopener">
+            <div class="src-t">How I Ship Big Features with Confidence</div>
+            <div class="src-u">richardporter.dev</div>
+            <div class="src-d">Shipping 15+ file features with fresh-context subagents.</div>
+          </a>
+          <a class="source-card" href="https://simonwillison.net/tags/jesse-vincent/" target="_blank" rel="noopener">
+            <div class="src-t">Simon Willison on jesse-vincent</div>
+            <div class="src-u">simonwillison.net</div>
+            <div class="src-d">Token-light design, the feelings journal, DOT-graph experiments.</div>
+          </a>
+        </div>
+      </section>
+
+      <section class="reveal">
+        <h2 id="skeptics">The skeptics</h2>
+        <p class="section-intro">Hacker News did not roll over. The criticism is worth taking seriously — it targets exactly the weak points an enthusiast tends to gloss over.</p>
+
+        <p>The thread on Vincent's announcement split sharply. On the positive side, <code>redhale</code> called sub-agents "an order-of-magnitude level feature" for longer loops, and <code>danielbarla</code> said Claude outperformed experienced teammates on dependency-injection debugging in legacy code. But the critics landed real hits.</p>
+
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>"It could make Claude worse"</h3>
+            <p><code>jackblemming</code> raised the empirical gap directly: without evidence the ceremony actually helps, you're shipping vibes.</p>
+            <blockquote style="margin-top:6px">"without benchmarks or some kind of evaluation... this could make Claude worse."<cite>jackblemming, Hacker News</cite></blockquote>
+          </div>
+          <div class="card">
+            <h3>"Voodoo nonsense"</h3>
+            <p><code>preommr</code> dismissed the Cialdini-style persuasion framing — using influence principles to make the model comply — as unscientific theater dressed up as method.</p>
+            <blockquote style="margin-top:6px">"straight up voodoo nonsense."<cite>preommr, Hacker News (on the Cialdini framing)</cite></blockquote>
+          </div>
+          <div class="card">
+            <h3>It still misbehaved</h3>
+            <p><code>troupo</code> reported the familiar failure modes survived the framework: LLMs still duplicated existing functionality and ignored the codebase's established styles.</p>
+          </div>
+          <div class="card">
+            <h3>Where are the questions?</h3>
+            <p><code>nightski</code> criticized the agent's inability to ask clarifying questions — the very thing the brainstorming skill is meant to fix didn't always land.</p>
+          </div>
+        </div>
+
+        <p>The most useful skeptical voice may be Marc Nuri, whose analysis is balanced rather than dismissive. He frames Superpowers as "a directory of fourteen skills, each a single SKILL.md file" with a bootstrap hook under 2,000 tokens, portable across Claude Code, Cursor, and Copilot CLI. His diagnosis of <em>why</em> it works is sharp: the agent has capability but lacks discipline.</p>
+
+        <blockquote>"Ask it to lecture you on TDD and it will. What it lacks is a mechanism that holds it to those concepts when shortcuts are easier."<cite>Marc Nuri — technical analysis of Superpowers</cite></blockquote>
+
+        <p>Nuri's example of that mechanism is the framework's "Iron Law": <strong>"NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST."</strong> The TDD skill, he notes, "treats <em>I'll write the test after</em> as grounds to delete the implementation and start over." But he's clear-eyed about the limits: the multi-agent-coordination problem and the "agentic slop PR" problem (see below) remain <strong>unsolved at scale</strong>.</p>
+
+        <div class="grid cols-2">
+          <a class="source-card" href="https://news.ycombinator.com/item?id=45547344" target="_blank" rel="noopener">
+            <div class="src-t">Superpowers — Hacker News discussion</div>
+            <div class="src-u">news.ycombinator.com</div>
+            <div class="src-d">The full divided thread: order-of-magnitude wins vs. "voodoo nonsense."</div>
+          </a>
+          <a class="source-card" href="https://blog.marcnuri.com/superpowers-claude-code-skills-framework" target="_blank" rel="noopener">
+            <div class="src-t">The Skills Framework Shipped as Markdown</div>
+            <div class="src-u">blog.marcnuri.com</div>
+            <div class="src-d">Marc Nuri: capability vs. discipline, the Iron Law, the unsolved problems.</div>
+          </a>
+        </div>
+      </section>
+
+      <section class="reveal">
+        <h2 id="token-cost">The overkill caveat</h2>
+        <p class="section-intro">Even fans agree on one thing: the full ceremony is the wrong tool for a small job.</p>
+
+        <p>For "fast iterative design work like changing a button color," the multi-phase process slows you down. For small, contained fixes the plan-generation overhead can cost more tokens than just doing the thing. And reviewers point out a structural cost: skills "load fully into context on every invocation," so a single execution-layer skill can run 10K+ tokens. Discipline isn't free.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Task shape</th><th>Reported effect of Superpowers</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Complex, multi-file feature</td><td>~14% token cut <em>and</em> a quality boost (per one benchmark-style writeup)</td></tr>
+              <tr><td>Small, contained fix</td><td>No measurable benefit — plan overhead may cost more than just executing</td></tr>
+              <tr><td>Trivial tweak (e.g. button color)</td><td>The five-phase ceremony actively slows you down</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">✓</div>
+          <p><strong>The honest read.</strong> Superpowers pays off where context-loss and inconsistency hurt — big features, long sessions, unfamiliar codebases. On a one-line change, reach for stock Claude Code instead. The framework's own analysts say as much.</p>
+        </div>
+
+        <a class="source-card" href="https://www.mindstudio.ai/blog/how-to-use-superpowers-plugin-claude-code" target="_blank" rel="noopener">
+          <div class="src-t">How to Use the Superpowers Plugin in Claude Code</div>
+          <div class="src-u">mindstudio.ai</div>
+          <div class="src-d">The ~14% token cut on complex tasks, none on simple ones; cost of full-context loading.</div>
+        </a>
+      </section>
+
+      <section class="reveal">
+        <h2 id="slop-prs">The 94% slop-PR story</h2>
+        <p class="section-intro">The framework's most cautionary tale came from its own success. When tens of thousands of agents can be told "go fix this and open a PR," the inbox fills with lies.</p>
+
+        <p>Vincent audited the last 100 closed PRs on the Superpowers repo and found roughly <strong>94% were AI-generated slop</strong> — agents that ignored the PR template, opened duplicates, fabricated problem descriptions, or pushed fork-specific changes upstream, usually because a human had casually told an agent to "go fix this and open a PR." He now closes such PRs within hours, sometimes with a blunt verdict.</p>
+
+        <blockquote>"This pull request is slop that's made of lies."<cite>Jesse Vincent, closing an agentic PR</cite></blockquote>
+
+        <p>His response was to weaponize the framework against itself: a <code>CLAUDE.md</code> aimed directly at the contributing agents reading it.</p>
+
+        <blockquote>"This repo has a 94% PR rejection rate. Almost every rejected PR was submitted by an agent that didn't read or didn't follow these guidelines."<cite>obra/superpowers — CLAUDE.md</cite></blockquote>
+
+        <p>That file codifies six mandatory pre-submission checks that every contributing agent must clear:</p>
+
+        <ol class="steps">
+          <li><h4>Fill in every PR-template section</h4><p>Real answers, not placeholders.</p></li>
+          <li><h4>Search existing open AND closed PRs</h4><p>Don't re-submit what's already been rejected.</p></li>
+          <li><h4>Verify it's a real problem</h4><p>Confirm the bug actually exists before "fixing" it.</p></li>
+          <li><h4>Confirm the change belongs in core</h4><p>Fork-specific tweaks don't go upstream.</p></li>
+          <li><h4>Identify yourself</h4><p>Disclose model, harness, harness version, and every installed plugin.</p></li>
+          <li><h4>Show your human the complete diff</h4><p>Get explicit approval before submitting.</p></li>
+        </ol>
+
+        <div class="callout quote">
+          <div class="ic">”</div>
+          <p>"Submitting a low-quality PR doesn't help them — it wastes the maintainers' time, burns your human partner's reputation, and the PR will be closed anyway." <strong>— obra/superpowers CLAUDE.md, addressing contributing agents</strong></p>
+        </div>
+
+        <p>It's a striking inversion: a project built to give agents discipline had to write a separate rulebook to defend itself <em>from</em> agents. The slop-PR problem is, in Marc Nuri's words, one of the things agentic development hasn't yet solved at scale.</p>
+
+        <div class="grid cols-2">
+          <a class="source-card" href="https://blog.fsck.com/2026/03/31/slop-prs/" target="_blank" rel="noopener">
+            <div class="src-t">Agentic slop PRs</div>
+            <div class="src-u">blog.fsck.com</div>
+            <div class="src-d">The 100-PR audit, the ~94% rejection rate, and the cautionary lesson.</div>
+          </a>
+          <a class="source-card" href="https://github.com/obra/superpowers/blob/main/CLAUDE.md" target="_blank" rel="noopener">
+            <div class="src-t">superpowers/CLAUDE.md</div>
+            <div class="src-u">github.com/obra/superpowers</div>
+            <div class="src-d">The six mandatory checks, written for the agents that read it.</div>
+          </a>
+        </div>
+      </section>
+
+      <section class="reveal">
+        <h2 id="stacking">Stacking it with other tools</h2>
+        <p class="section-intro">In practice, few people run Superpowers alone. It has a clear lane — execution — and developers pair it with complementary frameworks and tooling.</p>
+
+        <p>One widely-shared Dev.to writeup describes a three-framework stack with a memorable division of labor:</p>
+
+        <div class="flow">
+          <div class="node"><div class="n">01</div><div class="t">gstack</div><div class="s">thinks · architectural vetting</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">02</div><div class="t">GSD</div><div class="s">stabilizes · context across sessions</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">03</div><div class="t">Superpowers</div><div class="s">executes · plan → TDD → verify</div></div>
+        </div>
+
+        <blockquote>"gstack thinks, GSD stabilizes, Superpowers executes."<cite>imaginex — "A Claude Code Skills Stack" (Dev.to)</cite></blockquote>
+
+        <p>gstack handles decision-making and architectural vetting (<code>/office-hours</code>, <code>/plan-ceo-review</code>, <code>/plan-eng-review</code>); GSD keeps context stable across long sessions (<code>PROJECT.md</code>, <code>DECISIONS.md</code>, <code>KNOWLEDGE.md</code>); and Superpowers does the disciplined execution. The same author repeats the common criticism: "every task, no matter how small, runs through the full cycle."</p>
+
+        <p>A second pattern, from developer Chandler, goes wide instead of deep: Claude Code + Conductor + Superpowers running parallel git worktrees across multiple repos, fed Linear/GitHub issues plus NotebookLM research, with Context7 for docs and Tavily for web search. The motivation is eliminating "dead time" spent watching a single agent work.</p>
+
+        <blockquote>"The planning part of Superpowers is definitely the reason it performs so much better."<cite>Chandler (chand1012) — "The best way to do agentic development in 2026" (Dev.to)</cite></blockquote>
+
+        <div class="grid cols-2">
+          <a class="source-card" href="https://dev.to/imaginex/a-claude-code-skills-stack-how-to-combine-superpowers-gstack-and-gsd-without-the-chaos-44b3" target="_blank" rel="noopener">
+            <div class="src-t">A Claude Code Skills Stack</div>
+            <div class="src-u">dev.to/imaginex</div>
+            <div class="src-d">Combining Superpowers, gstack, and GSD without the chaos.</div>
+          </a>
+          <a class="source-card" href="https://dev.to/chand1012/the-best-way-to-do-agentic-development-in-2026-14mn" target="_blank" rel="noopener">
+            <div class="src-t">The best way to do agentic development in 2026</div>
+            <div class="src-u">dev.to/chand1012</div>
+            <div class="src-d">Conductor + worktrees + Context7 + Tavily, with Superpowers for planning.</div>
+          </a>
+        </div>
+      </section>
+
+      <section class="reveal">
+        <h2 id="ecosystem">Ecosystem context</h2>
+        <p class="section-intro">Superpowers doesn't exist in a vacuum — it sits on top of Anthropic's Agent Skills primitive and the Claude Code plugin system, and within a fast-growing catalog of community skills.</p>
+
+        <p>Anthropic formally introduced <strong>Agent Skills</strong> in an engineering post on October 16, 2025, defining a skill as a directory containing a <code>SKILL.md</code> file, loaded through <strong>progressive disclosure</strong>: just the name/description metadata at startup, the full body when relevant, and bundled files only as needed.</p>
+
+        <blockquote>"Skills extend Claude's capabilities by packaging your expertise into composable resources for Claude, transforming general-purpose agents into specialized agents that fit your needs."<cite>Anthropic Engineering — "Equipping agents for the real world with Agent Skills"</cite></blockquote>
+
+        <p>On December 18, 2025, Anthropic republished Agent Skills as an <strong>open, cross-platform standard</strong> with a spec and SDK — which is exactly what lets Superpowers ship from one skill format to Claude Code, Codex, Gemini CLI, Cursor, OpenCode, Factory Droid, and GitHub Copilot CLI. The mental model Anthropic offers is friendly: "Building a skill for an agent is like putting together an onboarding guide for a new hire."</p>
+
+        <p>Plugins are the layer above skills. Per the Claude Code docs, "Plugins extend Claude Code with skills, agents, hooks, and MCP servers. Plugin marketplaces are catalogs that help you discover and install these extensions." A marketplace is just a git repo with a <code>.claude-plugin/marketplace.json</code> — added with <code>/plugin marketplace add owner/repo</code> and installed with <code>/plugin install name@marketplace</code>. Secondary commentary has aptly called the marketplace "npm for AI-assisted development workflows." Superpowers is distributed on both Anthropic's official marketplace and its own.</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">install superpowers</span><button class="copy-btn">copy</button></div>
+        <pre><code># From Anthropic's official marketplace
+/plugin install superpowers@claude-plugins-official
+
+# Or from the Superpowers marketplace
+/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace</code></pre>
+
+        <p>Around all of this, the community has built curated catalogs — the various <code>awesome-claude-skills</code> lists (travisvn, ComposioHQ's "1000+ production ready" collection, karanb192's "50+ verified") — which routinely cite Superpowers as a flagship methodology. Anthropic also publishes open-source skills at <code>github.com/anthropics/skills</code>.</p>
+
+        <div class="grid cols-3">
+          <a class="source-card" href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills" target="_blank" rel="noopener">
+            <div class="src-t">Equipping agents with Agent Skills</div>
+            <div class="src-u">anthropic.com/engineering</div>
+            <div class="src-d">The SKILL.md primitive and progressive disclosure, from Anthropic.</div>
+          </a>
+          <a class="source-card" href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview" target="_blank" rel="noopener">
+            <div class="src-t">Agent Skills overview</div>
+            <div class="src-u">platform.claude.com</div>
+            <div class="src-d">Specialize, reduce repetition, compose — the platform reference.</div>
+          </a>
+          <a class="source-card" href="https://code.claude.com/docs/en/discover-plugins" target="_blank" rel="noopener">
+            <div class="src-t">Discover and install prebuilt plugins</div>
+            <div class="src-u">code.claude.com</div>
+            <div class="src-d">How plugins and marketplaces work in Claude Code.</div>
+          </a>
+        </div>
+
+        <div class="callout note">
+          <div class="ic">★</div>
+          <p><strong>The throughline.</strong> Independent commentary frames the whole pattern as <em>version-controlled, composable procedural knowledge</em> — discipline distributed as plain text. Superpowers is the most cited proof that the bet pays off.</p>
+        </div>
+      </section>
+
+      <section class="reveal">
+        <h2 id="tutorials">Tutorials &amp; walkthroughs</h2>
+        <p class="section-intro">If you'd rather watch than read, the framework has spawned a small genre of video explainers — several framing it, only half-jokingly, as the end of "vibe coding."</p>
+
+        <p>The recurring theme across these tutorials is the same insight that drives the framework: Superpowers <strong>intercepts Claude at key moments</strong> — to ask questions first, enforce TDD, plan before coding, and self-review before moving on — rather than letting it improvise.</p>
+
+        <div class="tag-row">
+          <span class="pill accent">end of vibe coding</span>
+          <span class="pill">7-phase workflow</span>
+          <span class="pill">questions first</span>
+          <span class="pill">enforced TDD</span>
+          <span class="pill">self-review</span>
+        </div>
+
+        <div class="grid cols-3" style="margin-top:18px">
+          <a class="source-card" href="https://www.youtube.com/watch?v=TX91PdBn_IA" target="_blank" rel="noopener">
+            <div class="src-t">Claude Code + SUPERPOWERS = The End of Vibe Coding?</div>
+            <div class="src-u">youtube.com</div>
+            <div class="src-d">Full tutorial (Mar 31, 2026) on intercepting Claude to plan and test first.</div>
+          </a>
+          <div class="card">
+            <h3>The Plugin Every Developer Must Learn</h3>
+            <p>A walkthrough of the 7-phase workflow (Apr 3, 2026) — brainstorm through self-review.</p>
+          </div>
+          <div class="card">
+            <h3>Full Test &amp; Honest Review</h3>
+            <p>"Superpowers + Claude Code" hands-on review (Feb 17, 2026), weighing the ceremony against the payoff.</p>
+          </div>
+        </div>
+
+        <div class="divider-label">The bottom line</div>
+        <p>Strip away the divergent star counts and the hot takes, and the consensus is narrow but real: on substantial, multi-file work in unfamiliar code, the disciplined process measurably helps. On trivial changes, it's overkill. And at the scale of a popular open-source repo, agentic contribution is still a genuinely unsolved problem — a caution the project's own maintainer wrote down in plain Markdown, for the next agent to read.</p>
+
+        <div class="pull">The web's verdict, distilled: it doesn't make the model smarter — it makes the model <span>finish the job properly</span>, when the job is big enough to be worth it.</div>
+      </section>
+
+      <div class="pager">
+        <a href="use-cases.html"><div class="dir">← Prev</div><div class="ttl">Use Cases</div></a>
+        <a class="next" href="index.html"><div class="dir">Back to →</div><div class="ttl">Home</div></a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="col footer-brand">
+      <a class="brand" href="index.html"><span class="glyph"><img src="assets/logo.svg" alt=""></span><b>Superpowers</b></a>
+      <p>An agentic skills framework &amp; software-development methodology that gives coding agents a disciplined process — brainstorm, plan, test-drive, review, ship.</p>
+    </div>
+    <div class="col">
+      <h5>The Wiki</h5>
+      <a href="essence.html">The Essence</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="meta-programming.html">Meta-Programming</a>
+      <a href="methods.html">The Methods</a>
+    </div>
+    <div class="col">
+      <h5>Explore</h5>
+      <a href="brainstorming.html">Brainstorming Engine</a>
+      <a href="examples.html">Steps &amp; Examples</a>
+      <a href="use-cases.html">Use Cases</a>
+      <a href="web-use-cases.html">From the Web</a>
+    </div>
+    <div class="col">
+      <h5>Source</h5>
+      <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">GitHub repo</a>
+      <a href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">Original announcement</a>
+      <a href="https://github.com/obra/superpowers/blob/main/RELEASE-NOTES.md" target="_blank" rel="noopener">Release notes</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>Unofficial documentation wiki · built from the v5.1.0 source tree.</span>
+    <span>Superpowers © Jesse Vincent &amp; Prime Radiant · MIT License</span>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

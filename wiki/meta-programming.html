@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Meta-Programming — Superpowers Wiki</title>
+<meta name="description" content="Skills are code that shapes agent behavior, and writing-skills is a program that writes programs — the conceptual heart of Superpowers.">
+<link rel="icon" href="assets/app-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="glyph"><img src="assets/logo.svg" alt=""></span>
+    <b>Superpowers</b>
+    <span class="tag">WIKI</span>
+  </a>
+  <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="essence.html">Essence</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="meta-programming.html">Meta-Programming</a>
+    <a href="methods.html">Methods</a>
+    <a href="brainstorming.html">Brainstorming</a>
+    <a href="examples.html">Examples</a>
+    <a href="use-cases.html">Use Cases</a>
+    <a href="web-use-cases.html">From the Web</a>
+  </nav>
+  <div class="header-right">
+    <a class="gh-link" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">On this page</div>
+      <a href="#skills-are-code">Skills are code, not prose</a>
+      <a href="#three-layers">Three layers of the program</a>
+      <a href="#one-percent">The 1% rule</a>
+      <a href="#writing-skills">A program that writes programs</a>
+      <a href="#description-when">Description = WHEN, not WHAT</a>
+      <a href="#hardening">Hardening against the interpreter</a>
+      <a href="#flowcharts">Flowcharts as control flow</a>
+      <a href="#testing">Subagents &amp; progressive disclosure</a>
+    </aside>
+    <div class="content">
+      <div class="hero">
+        <span class="eyebrow">Page 03 · The deep cut</span>
+        <h1 class="page-title">Agentic <span class="grad-text">Meta-Programming</span></h1>
+        <p class="lede">Stop reading Superpowers as documentation. Read it as source code. A skill is a reusable, version-controlled <strong>procedure</strong> — a prompt-program — that teaches a coding agent an expert workflow. The skills compose at runtime into a full development methodology, and one skill, <code>writing-skills</code>, is a program whose output is other programs. This is the conceptual heart of the whole repo: meta-programming, but the interpreter is a large language model.</p>
+      </div>
+
+      <!-- ============================ SKILLS ARE CODE ============================ -->
+      <section class="reveal">
+        <h2 id="skills-are-code">Skills are code, not prose</h2>
+        <p class="section-intro">The repo states its governing thesis in three words inside its own <code>CLAUDE.md</code>, and once you accept it the entire design falls into place.</p>
+
+        <blockquote>"Skills are not prose — they are code that shapes agent behavior."<cite>Superpowers <code>CLAUDE.md</code></cite></blockquote>
+
+        <p>Anthropic supplies the substrate. In its October 2025 engineering post it defines a skill as a directory containing a <code>SKILL.md</code> file whose YAML frontmatter carries two required fields — <strong>name</strong> and <strong>description</strong> — plus optional bundled scripts and resources. Crucially, skills can ship executable code that Claude runs via bash, and "the script's code never loads into the context window. Only the script's output… consumes tokens." A skill is therefore not a prompt you paste; it is a filesystem-backed resource that the agent discovers, pages in, and executes.</p>
+
+        <p>Superpowers takes that primitive and treats the whole library as a programming system. Each procedure is plain Markdown, but it is authored, version-controlled, and adversarially tested the way a codebase is. The agent is the CPU; the skills are the instructions; git is the package manager. The framework's own README puts the ambition in one sentence:</p>
+
+        <div class="callout quote"><div class="ic">❝</div><p><strong>The thesis.</strong> "Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them." <em>— Superpowers README</em></p></div>
+
+        <div class="pull">It doesn't make the model smarter. It hands the model a library of <span>procedures it can call</span> — and the discipline to actually call them.</div>
+      </section>
+
+      <!-- ============================ THREE LAYERS ============================ -->
+      <section class="reveal">
+        <h2 id="three-layers">Three layers of the program</h2>
+        <p class="section-intro">What turns a folder of Markdown into a program library is the separation of concerns. Three distinct layers do three distinct jobs: <strong>find</strong> the right procedure, <strong>force</strong> the agent to run it, and <strong>chain</strong> procedures into a workflow.</p>
+
+        <div class="grid cols-3">
+          <div class="card hover">
+            <div class="ico">①</div>
+            <h3>Discovery / index</h3>
+            <p>Only frontmatter — <code>name</code> + <code>description</code> — is pre-loaded into the system prompt at startup (~100 tokens per skill). The description is a pure trigger predicate answering one question: <em>"should I read this skill now?"</em> The bodies stay on disk until needed.</p>
+          </div>
+          <div class="card hover">
+            <div class="ico">②</div>
+            <h3>Control</h3>
+            <p>The <code>using-superpowers</code> bootstrap, loaded at session start, routes every user message through a mandatory gate <em>before</em> the agent acts. This is what makes skills auto-trigger instead of sitting inert on disk.</p>
+          </div>
+          <div class="card hover">
+            <div class="ico">③</div>
+            <h3>Composition</h3>
+            <p>Skills tail-call each other with explicit terminal states. <code>brainstorming</code> hands off to <code>writing-plans</code>, which hands off to worktrees and execution — a call graph of prompt-programs with return semantics.</p>
+          </div>
+        </div>
+
+        <p>Map those layers onto Anthropic's own three levels of <strong>progressive disclosure</strong> and they line up exactly: metadata pre-loaded ("just enough information for Claude to know when each skill should be used without loading all of it into context"), the <code>SKILL.md</code> body loaded only when judged relevant, and bundled files navigated only as needed — "effectively unbounded" context at near-zero idle cost. Superpowers adds the missing control layer that the bare standard leaves to the host: a bootstrap that actually pulls the trigger.</p>
+
+        <div class="flow">
+          <div class="node"><div class="n">L1</div><div class="t">Index</div><div class="s">name + description</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">L2</div><div class="t">Body</div><div class="s">SKILL.md on demand</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">L3</div><div class="t">Refs</div><div class="s">bundled files / scripts</div></div>
+        </div>
+      </section>
+
+      <!-- ============================ THE 1% RULE ============================ -->
+      <section class="reveal">
+        <h2 id="one-percent">The 1% rule</h2>
+        <p class="section-intro">A program library is worthless if the runtime never calls into it. The <code>using-superpowers</code> bootstrap solves the hardest problem in the whole design — getting the agent to <em>stop and look</em> — with a single, deliberately extreme threshold.</p>
+
+        <blockquote>"If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill. … You cannot rationalize your way out of this."<cite>Superpowers <code>using-superpowers/SKILL.md</code></cite></blockquote>
+
+        <p>The bootstrap is loaded at session start, so the gate runs without any per-session opt-in. Every incoming message is routed through one question — <em>"Might any skill apply?"</em> — answered <strong>yes</strong> on even a 1% chance. When the answer is yes, the agent must do three things in order before it does anything else:</p>
+
+        <ol class="steps">
+          <li><h4>Invoke</h4><p>Call the Skill tool and actually read the procedure. No working from memory — a remembered skill is not a loaded skill.</p></li>
+          <li><h4>Announce</h4><p>Say it out loud: <code>Using [skill] to [purpose]</code>. A public commitment is harder to abandon mid-task than a private intention.</p></li>
+          <li><h4>Convert to TodoWrite</h4><p>Turn each checklist item into a TodoWrite todo, then follow the skill exactly. The todo list becomes a commitment device the agent can't quietly skip.</p></li>
+        </ol>
+
+        <p>A Red Flags table pre-empts the specific evasions the model reaches for — "This is just a simple question" is met with "Questions are tasks. Check for skills." Without this control layer, the rest of the library is, in the repo's own words, "dead weight — present on disk but never invoked." The acceptance test in <code>CLAUDE.md</code> is blunt: typing "Let's make a react todo list" must auto-trigger the <code>brainstorming</code> skill before a single line of code is written.</p>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>Why so aggressive?</strong> The bootstrap is fighting the model's default helpfulness. Left alone, an agent jumps straight to code. The 1% rule deliberately over-triggers so that the cost of a false skip — silently abandoning the methodology — never gets paid.</p></div>
+      </section>
+
+      <!-- ============================ WRITING-SKILLS ============================ -->
+      <section class="reveal">
+        <h2 id="writing-skills">writing-skills: a program that writes programs</h2>
+        <p class="section-intro">Here is the self-referential core. The tool that produces the agent's procedures is itself a disciplined engineering procedure — and the discipline it uses is <strong>Test-Driven Development</strong>.</p>
+
+        <blockquote>"Writing skills IS Test-Driven Development applied to process documentation."<cite>Superpowers <code>writing-skills/SKILL.md</code></cite></blockquote>
+
+        <p>Every TDD concept maps cleanly onto authoring. The test is a <strong>pressure scenario</strong> run against a fresh subagent. The production code is the <code>SKILL.md</code>. You must watch the agent fail without the skill before you write it — because "if you didn't watch an agent fail without the skill, you don't know if the skill teaches the right thing." Then you write the minimal skill that fixes exactly those observed failures, re-run, and harden.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>TDD phase</th><th>In code</th><th>In skill authoring</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Test</strong></td><td>Failing unit test</td><td>Pressure scenario with a subagent</td></tr>
+              <tr><td><strong>Production code</strong></td><td>The implementation</td><td>The <code>SKILL.md</code> body</td></tr>
+              <tr><td><strong>RED</strong></td><td>Test fails</td><td>Subagent violates the rule <em>without</em> the skill</td></tr>
+              <tr><td><strong>GREEN</strong></td><td>Test passes</td><td>Subagent complies <em>with</em> the skill loaded</td></tr>
+              <tr><td><strong>REFACTOR</strong></td><td>Clean up, keep green</td><td>Close newly-invented loopholes, stay compliant</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>The whole thing is enforced by an Iron Law, applied to brand-new skills and to edits alike:</p>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>Iron Law.</strong> NO SKILL WITHOUT A FAILING TEST FIRST. "Write skill before testing? Delete it. Start over." The meta-skill holds itself to the same standard it teaches everything else.</p></div>
+
+        <p>Jesse Vincent describes the bootstrap of the bootstrap plainly: "One of the first skills I taught Superpowers was How to create skills." A framework that can author its own procedures — tested like code, version-controlled like code — is self-extending. That is the precise sense in which Superpowers is <em>agentic meta-programming</em>.</p>
+      </section>
+
+      <!-- ============================ DESCRIPTION = WHEN ============================ -->
+      <section class="reveal">
+        <h2 id="description-when">Description = WHEN, not WHAT (Claude Search Optimization)</h2>
+        <p class="section-intro">The index layer hangs entirely on one field — the <code>description</code> — and one of the project's sharpest empirical findings is about how to write it. The rule is counterintuitive: describe only <em>when</em> to use the skill, never <em>what</em> it does.</p>
+
+        <blockquote>"CRITICAL: Description = When to Use, NOT What the Skill Does … Testing revealed that when a description summarizes the skill's workflow, Claude may follow the description instead of reading the full skill content."<cite>Superpowers <code>writing-skills/SKILL.md</code></cite></blockquote>
+
+        <p>The failure mode is concrete and a little alarming. A description that summarized a workflow caused Claude to act on the <em>summary</em> and skip the real procedure. In the documented case, a description saying code review happens "between tasks" caused Claude to do <strong>one</strong> review — even though the skill's flowchart clearly showed <strong>two</strong>. The agent winged it from the metadata. The fix was to strip the description down to a pure trigger predicate, which sent Claude back to the flowchart, and it did both reviews.</p>
+
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>The trap — workflow summary</h3>
+            <div class="tag-row"><span class="pill">do not</span></div>
+            <p>"Reviews code for quality and spec compliance between implementation tasks, running two passes…"</p>
+            <p style="color:var(--muted)">Claude follows the sentence and skips the body. It did one review instead of two.</p>
+          </div>
+          <div class="card">
+            <h3>The fix — trigger predicate</h3>
+            <div class="tag-row"><span class="pill accent">do</span></div>
+            <p>"Use when you have just finished a task and are about to start the next one…"</p>
+            <p style="color:var(--muted)">A pure "should I read this now?" question. Claude reads the flowchart and follows it.</p>
+          </div>
+        </div>
+
+        <p>The conventions follow from this: start with <strong>"Use when…"</strong>, write in the third person (it is injected straight into the system prompt), cap it at 1024 characters, and name the skill verb-first — <code>creating-skills</code>, not <code>skill-creation</code>. Call it Claude Search Optimization: the description isn't advertising copy, it's a retrieval key. Note one subtlety worth flagging — Anthropic's own platform spec asks the description to state "both what the skill does and when to use it," whereas Superpowers found that, under its strict-compliance skills, the "what" half actively backfires.</p>
+      </section>
+
+      <!-- ============================ HARDENING ============================ -->
+      <section class="reveal">
+        <h2 id="hardening">Hardening against the interpreter</h2>
+        <p class="section-intro">Here is what makes these prompt-programs unlike ordinary code: the interpreter is clever, and under pressure it will argue with its own instructions. So the discipline skills are deliberately bulletproofed against the agent's own ingenuity.</p>
+
+        <p>The repo is candid about why: "Agents are smart and will find loopholes when under pressure." The toolkit for closing those loopholes is layered, and every layer is built from real failures captured during testing:</p>
+
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>Foundational cut</h3>
+            <p>A single early principle kills the largest class of evasions: <em>"Violating the letter of the rules is violating the spirit of the rules."</em> No more "technically I followed it."</p>
+          </div>
+          <div class="card">
+            <h3>Explicit loophole negation</h3>
+            <p>Spell out the escape and close it: "Delete it. Start over. … Don't keep it as reference. … Delete means delete."</p>
+          </div>
+          <div class="card">
+            <h3>Rationalization Tables</h3>
+            <p>A two-column <em>Excuse | Reality</em> table built verbatim from baseline test transcripts, so each real rationalization gets a pre-written rebuttal.</p>
+          </div>
+          <div class="card">
+            <h3>Red Flags &amp; HARD-GATEs</h3>
+            <p>Self-check thoughts that all resolve to "STOP and start over," plus hard gates like brainstorming's: "Do NOT invoke any implementation skill… until the user has approved it."</p>
+          </div>
+        </div>
+
+        <p>None of this is folk wisdom — it's grounded in persuasion research. The <code>persuasion-principles.md</code> reference cites Meincke et al. (2025), a study across roughly 28,000 AI conversations, where the right techniques "more than doubled compliance rates (33% → 72%, p &lt; .001)." Those levers are deployed deliberately: <strong>authority</strong> (imperative "YOU MUST", "No exceptions"), <strong>commitment</strong> (announce usage, force an explicit A/B/C choice, track via TodoWrite), and <strong>social proof</strong>. Because this content is empirically tuned, <code>CLAUDE.md</code> forbids editing it without eval evidence.</p>
+
+        <blockquote>"Persuasion techniques more than doubled compliance rates (33% → 72%, p &lt; .001)."<cite>Meincke et al. (2025), cited in <code>persuasion-principles.md</code></cite></blockquote>
+      </section>
+
+      <!-- ============================ FLOWCHARTS ============================ -->
+      <section class="reveal">
+        <h2 id="flowcharts">Flowcharts as control flow</h2>
+        <p class="section-intro">When a skill needs to express branching logic, it doesn't write prose — it draws a Graphviz <code>dot</code> digraph. The flowchart is the control-flow notation of the prompt-program, with a typed visual grammar.</p>
+
+        <p>The discipline is precise: flowcharts are for <strong>non-obvious decision points</strong>, process loops where you might stop too early, and "when to use A vs B" choices — and for nothing else. Reference material uses tables, code uses Markdown, linear steps use numbered lists. The <code>graphviz-conventions.dot</code> file defines a strict typed grammar so every diagram in the corpus reads the same way:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Shape</th><th>Means</th></tr></thead>
+            <tbody>
+              <tr><td>diamond</td><td>a question / decision</td></tr>
+              <tr><td>box</td><td>an action</td></tr>
+              <tr><td>plaintext</td><td>a command to run</td></tr>
+              <tr><td>ellipse</td><td>a state</td></tr>
+              <tr><td>red octagon</td><td>a warning / stop</td></tr>
+              <tr><td>doublecircle</td><td>entry / exit point</td></tr>
+              <tr><td>dotted edge</td><td>"triggers" another skill</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">skills/writing-skills/graphviz-conventions.dot</span><button class="copy-btn">copy</button></div>
+        <pre><code>digraph decision {
+  start   [shape=doublecircle, label="user message"];
+  apply   [shape=diamond,      label="Might any skill apply?"];
+  invoke  [shape=box,          label="Invoke the skill"];
+  wing    [shape=octagon, color=red, label="STOP: do not wing it"];
+
+  start  -&gt; apply;
+  apply  -&gt; invoke [label="yes (even 1%)"];
+  apply  -&gt; wing   [label="no — are you sure?"];
+}</code></pre>
+
+        <p>The <code>using-superpowers</code> gate, the RED-GREEN-REFACTOR cycle, and the brainstorming spec-review loop are all expressed this way, and <code>render-graphs.js</code> turns them into SVG for the human partner to read. Two things are explicitly forbidden inside nodes: actual code, and semantically-empty labels like <code>step1</code> or <code>helper2</code>. The diagram has to carry real meaning, not decoration.</p>
+      </section>
+
+      <!-- ============================ TESTING ============================ -->
+      <section class="reveal">
+        <h2 id="testing">Testing skills with subagents &amp; progressive disclosure</h2>
+        <p class="section-intro">If skills are programs, what is the test harness? Other agents. A fresh subagent is the unit-test fixture — a clean interpreter with no context contamination.</p>
+
+        <p>The pattern descends from Anthropic's "Claude A / Claude B" loop: Claude A authors and refines the skill; Claude B, a fresh instance with the skill loaded, executes real tasks; the gaps in Claude B's behavior go back to Claude A. Superpowers sharpens this into <strong>adversarial pressure-testing</strong>. Scenarios use real file paths, force a concrete choice — "What do you do?" not "What should you do?" — allow no easy out, and combine three or more pressures at once:</p>
+
+        <div class="tag-row">
+          <span class="pill">time</span>
+          <span class="pill">sunk cost</span>
+          <span class="pill">authority</span>
+          <span class="pill">economic</span>
+          <span class="pill">exhaustion</span>
+          <span class="pill">social</span>
+          <span class="pill accent">pragmatic</span>
+        </div>
+
+        <p>You run the subagent <em>without</em> the skill first to capture its rationalizations verbatim, then plug each one. When the agent makes a wrong choice you do <strong>meta-testing</strong>: ask it how the skill should have been written. The answers sort into three buckets — "the skill was clear, I ignored it" (needs a stronger foundational principle), "it should have said X" (add it verbatim), or "I didn't see section Y" (reorganize). A skill is <strong>bulletproof</strong> when the agent picks the right option under maximum pressure <em>and</em> cites the skill while doing it.</p>
+
+        <p>That subagent-as-fixture mirrors the runtime itself: <code>subagent-driven-development</code> dispatches a fresh subagent per task for exactly the same context-isolation reason. And it depends on the last piece of the puzzle — progressive disclosure used as a filesystem-backed virtual memory. References are kept one level deep from each <code>SKILL.md</code>, bodies stay under tight token budgets, and there is a hard rule against <code>@</code>-links:</p>
+
+        <blockquote>"Why no @ links: <code>@</code> syntax force-loads files immediately, consuming 200k+ context before you need them."<cite>Superpowers <code>writing-skills/SKILL.md</code></cite></blockquote>
+
+        <p>The agent pages in exactly the procedure it needs, exactly when it needs it. Put it all together and you have the full picture: natural-language procedures, version-controlled and adversarially tested like code, that a smart-but-rationalizing interpreter executes reliably — even under pressure. That is what Superpowers means by treating skills as code.</p>
+
+        <div class="grid cols-3">
+          <div class="card"><div class="stat"><div class="num">~100</div><div class="lbl">tokens per skill at startup</div></div></div>
+          <div class="card"><div class="stat"><div class="num">3+</div><div class="lbl">combined pressures per test</div></div></div>
+          <div class="card"><div class="stat"><div class="num">200k+</div><div class="lbl">tokens an @-link would waste</div></div></div>
+        </div>
+
+        <p>Want to see these procedures actually run, end to end? Head to <a href="methods.html">The Methods →</a> for the full lifecycle they compose into.</p>
+
+        <div class="grid cols-2">
+          <a class="source-card" href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills" target="_blank" rel="noopener">
+            <div class="src-t">Equipping agents for the real world with Agent Skills</div>
+            <div class="src-u">anthropic.com/engineering</div>
+            <div class="src-d">Anthropic's definition of skills, SKILL.md, and three-level progressive disclosure.</div>
+          </a>
+          <a class="source-card" href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">
+            <div class="src-t">Superpowers: How I'm using coding agents in October 2025</div>
+            <div class="src-u">blog.fsck.com</div>
+            <div class="src-d">Jesse Vincent on TDD for skills and "the first skill I taught Superpowers was How to create skills."</div>
+          </a>
+        </div>
+      </section>
+
+      <div class="pager">
+        <a href="architecture.html"><div class="dir">← Prev</div><div class="ttl">Architecture</div></a>
+        <a class="next" href="methods.html"><div class="dir">Next →</div><div class="ttl">The Methods</div></a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="col footer-brand">
+      <a class="brand" href="index.html"><span class="glyph"><img src="assets/logo.svg" alt=""></span><b>Superpowers</b></a>
+      <p>An agentic skills framework &amp; software-development methodology that gives coding agents a disciplined process — brainstorm, plan, test-drive, review, ship.</p>
+    </div>
+    <div class="col">
+      <h5>The Wiki</h5>
+      <a href="essence.html">The Essence</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="meta-programming.html">Meta-Programming</a>
+      <a href="methods.html">The Methods</a>
+    </div>
+    <div class="col">
+      <h5>Explore</h5>
+      <a href="brainstorming.html">Brainstorming Engine</a>
+      <a href="examples.html">Steps &amp; Examples</a>
+      <a href="use-cases.html">Use Cases</a>
+      <a href="web-use-cases.html">From the Web</a>
+    </div>
+    <div class="col">
+      <h5>Source</h5>
+      <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">GitHub repo</a>
+      <a href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">Original announcement</a>
+      <a href="https://github.com/obra/superpowers/blob/main/RELEASE-NOTES.md" target="_blank" rel="noopener">Release notes</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>Unofficial documentation wiki · built from the v5.1.0 source tree.</span>
+    <span>Superpowers © Jesse Vincent &amp; Prime Radiant · MIT License</span>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

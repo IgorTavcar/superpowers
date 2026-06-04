@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Essence — Superpowers Wiki</title>
+<meta name="description" content="Where Superpowers came from, what it believes, and the mantra at its heart — a methodology that makes coding agents disciplined, not smarter.">
+<link rel="icon" href="assets/app-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="glyph"><img src="assets/logo.svg" alt=""></span>
+    <b>Superpowers</b>
+    <span class="tag">WIKI</span>
+  </a>
+  <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="essence.html">Essence</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="meta-programming.html">Meta-Programming</a>
+    <a href="methods.html">Methods</a>
+    <a href="brainstorming.html">Brainstorming</a>
+    <a href="examples.html">Examples</a>
+    <a href="use-cases.html">Use Cases</a>
+    <a href="web-use-cases.html">From the Web</a>
+  </nav>
+  <div class="header-right">
+    <a class="gh-link" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">On this page</div>
+      <a href="#what-it-is">What Superpowers actually is</a>
+      <a href="#origin">Origin story</a>
+      <a href="#discipline">Discipline, not capability</a>
+      <a href="#magic-words">Skills give your agents Superpowers</a>
+      <a href="#workflow">Brainstorm → Plan → Implement</a>
+      <a href="#self-improving">Self-improving skills</a>
+      <a href="#four-parts">What it is, in four parts</a>
+      <a href="#mantra">The mantra: "Why am I doing this?"</a>
+    </aside>
+    <div class="content">
+      <div class="hero">
+        <span class="eyebrow">Page 01 · The big idea</span>
+        <h1 class="page-title">The <span class="grad-text">Essence</span></h1>
+        <p class="lede">Superpowers didn't begin as a product. It began as one developer's private toolkit for steering his "agentic buddy" — a set of hard-won procedures he'd been quietly systematizing until Anthropic shipped a way to share them. At its heart is a single, almost contrarian bet: that what coding agents lack isn't <em>capability</em>, it's <em>discipline</em> — and that discipline can be written down as plain Markdown and handed to any model.</p>
+      </div>
+
+      <!-- ===================== WHAT IT IS ===================== -->
+      <section class="reveal">
+        <h2 id="what-it-is">What Superpowers actually is</h2>
+        <p class="section-intro">Strip away the name and the lore, and the project describes itself with disarming plainness. It is not a model, not an agent, and not a pile of clever prompts. It is a <strong>methodology</strong> — a complete way of working — packaged so that an agent will actually follow it.</p>
+
+        <blockquote>"Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them."<cite>README, obra/superpowers</cite></blockquote>
+
+        <p>Two halves do all the work. The first is a library of <strong>skills</strong>: small, version-controlled procedures — one folder, one <code>SKILL.md</code> each — that encode an expert workflow as natural language a model can read and execute. The second is the "initial instructions" — a session-start <strong>bootstrap</strong> whose entire job is to make the agent reach for those skills at the right moment, unprompted. Skills alone are inert; the bootstrap is what turns a directory of Markdown into a program library the agent runs.</p>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>The crucial framing.</strong> Skills are not documentation about the agent. As the repo's <code>CLAUDE.md</code> puts it, <em>"Skills are not prose — they are code that shapes agent behavior."</em> The whole project is meta-programming: procedures kept under git, indexed by metadata, and composed at runtime into a development process.</p></div>
+
+        <p>The payoff, in one line: Superpowers doesn't try to make the model <em>smarter</em>. It makes the model <em>disciplined</em>. A capable model that skips the steps still ships sloppy work; this is an attempt to stop it from skipping the steps.</p>
+      </section>
+
+      <!-- ===================== ORIGIN ===================== -->
+      <section class="reveal">
+        <h2 id="origin">Origin story</h2>
+        <p class="section-intro">Superpowers is, in the most literal sense, a personal-workflow project that escaped the lab.</p>
+
+        <p>Its author is <strong>Jesse Vincent</strong> — a longtime open-source developer (creator of RT/Request Tracker and the Keyboardio), who writes at <strong>blog.fsck.com</strong> under the wonderful banner <em>"Massively Parallel Procrastination"</em> and goes by the handle <strong>obra</strong> on GitHub. For weeks before there was anything to release, he'd been refining a private system for getting more reliable work out of Claude Code. Then, on a single October morning in 2025, Anthropic handed him a delivery vehicle.</p>
+
+        <blockquote>"I've spent the past couple of weeks working on a set of tools to better extract and systematize my processes and to help better steer my agentic buddy. I'd been planning to start to document the system this weekend, but then this morning, Anthropic went and rolled out a plugin system for claude code."<cite>Jesse Vincent · "Superpowers" · Oct 9, 2025</cite></blockquote>
+
+        <p>The plugin launch is the spark, but the workflow itself was older. Vincent had already written up a <strong>brainstorm → plan → implement</strong> process in his earlier "How I'm using coding agents" posts. Superpowers' real innovation was making that process <em>trigger itself</em> — no command to remember, no prompt to paste. He also didn't start from a blank page: he reverse-engineered Anthropic's earliest MS Office skills to build the core skill system, and drew inspiration from Microsoft's <strong>Amplifier</strong> (Sam Schillace, Brian Krabach), which "uses this same pattern of a coding agent that improves itself by writing out markdown docs and writing tools for itself."</p>
+
+        <div class="grid cols-3">
+          <a class="source-card" href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">
+            <div class="src-t">Superpowers: How I'm using coding agents in October 2025</div>
+            <div class="src-u">blog.fsck.com/2025/10/09</div>
+            <div class="src-d">The launch post — the bootstrap, the workflow, and the bet behind it.</div>
+          </a>
+          <a class="source-card" href="https://blog.fsck.com/2025/10/16/skills-for-claude/" target="_blank" rel="noopener">
+            <div class="src-t">Skills for Claude!</div>
+            <div class="src-u">blog.fsck.com/2025/10/16</div>
+            <div class="src-d">What skills are, how compliance is engineered, and the self-improvement thesis.</div>
+          </a>
+          <a class="source-card" href="https://simonwillison.net/tags/jesse-vincent/" target="_blank" rel="noopener">
+            <div class="src-t">Simon Willison on jesse-vincent</div>
+            <div class="src-u">simonwillison.net/tags/jesse-vincent</div>
+            <div class="src-d">An early, independent read on why the approach matters.</div>
+          </a>
+        </div>
+      </section>
+
+      <!-- ===================== DISCIPLINE ===================== -->
+      <section class="reveal">
+        <h2 id="discipline">The core belief: discipline, not capability</h2>
+        <p class="section-intro">If there is one sentence that captures the soul of the project, it is the wager about <em>where the problem really lives</em>.</p>
+
+        <div class="pull">It's the bet that what AI coding agents lack isn't capability — it's <span>discipline</span>. And that discipline can be distributed as plain Markdown.</div>
+
+        <p>The reasoning is almost embarrassingly practical. A strong model already knows how to write a test, isolate a branch, or chase a bug to its root cause. What it doesn't reliably do is <em>choose</em> to — especially under pressure, when a shortcut looks tempting and "just this once" sounds reasonable. So Superpowers spends its effort not on raw intelligence but on <strong>compliance</strong>: getting a smart, occasionally-rationalizing interpreter to follow a good procedure even when it would rather wing it.</p>
+
+        <p>That's why the discipline-bearing skills read less like tutorials and more like contracts. They carry an <strong>Iron Law</strong>, a table of common rationalizations paired with their rebuttals, and a foundational cut designed to close the largest class of loopholes at once:</p>
+
+        <blockquote>"Violating the letter of the rules is violating the spirit of the rules."<cite>test-driven-development/SKILL.md</cite></blockquote>
+
+        <div class="callout tip"><div class="ic">✓</div><p><strong>Why it can travel as text.</strong> Because the unit of value is a <em>procedure</em>, not a weight, a skill is just a file. It can be committed, diffed, reviewed, copied between projects, and improved over time — the same lifecycle you already use for code, now applied to how the agent thinks.</p></div>
+      </section>
+
+      <!-- ===================== MAGIC WORDS ===================== -->
+      <section class="reveal">
+        <h2 id="magic-words">Skills give your agents Superpowers</h2>
+        <p class="section-intro">The name isn't decoration. For Vincent, a skill is a genuinely potent thing — and he's refreshingly honest about <em>why</em> it works.</p>
+
+        <blockquote>"Skills are incredibly powerful. They're magic words that make your agent behave differently, even without you asking directly… They're not just subject to prompt injection — They are the very definition of prompt injection."<cite>Jesse Vincent · "Skills for Claude!" · Oct 16, 2025</cite></blockquote>
+
+        <p>That candor matters. The same mechanism that lets a malicious string hijack an agent is the mechanism Superpowers uses, deliberately and in the open, to install good habits. A skill is a curated piece of context that reshapes behavior the moment it's read — so the discipline of the corpus is the whole safety story. The framework treats its own instructions as load-bearing and adversarially tested, precisely because text this powerful must be trustworthy.</p>
+
+        <p>There's also a subtle design insight buried in how skills are surfaced. Each skill's <code>description</code> describes only <em>when</em> to use it — a trigger predicate, never a summary of what it does. The reason is empirical:</p>
+
+        <blockquote>"In my testing, I've found that showing only 'When should Claude use this skill?' leads to better compliance. When Claude thinks it knows what a skill does, it's more likely to believe it's using the skill and just wing it, even if it hasn't read it yet."<cite>Jesse Vincent · "Skills for Claude!" · Oct 16, 2025</cite></blockquote>
+
+        <p>Tell the agent the gist, and it will confidently improvise the rest. Tell it only "this applies now," and it will actually open the file and follow the steps. The framework is built around that one stubborn fact about how models behave.</p>
+      </section>
+
+      <!-- ===================== WORKFLOW ===================== -->
+      <section class="reveal">
+        <h2 id="workflow">Brainstorm → Plan → Implement</h2>
+        <p class="section-intro">The methodology Superpowers encodes isn't new to Vincent — it's the process he'd already documented. The breakthrough was deleting the friction: you no longer invoke it. It invokes itself.</p>
+
+        <div class="flow">
+          <div class="node"><div class="n">01</div><div class="t">Brainstorm</div><div class="s">tease out a spec</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">02</div><div class="t">Plan</div><div class="s">junior-proof tasks</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">03</div><div class="t">Implement</div><div class="s">red/green TDD</div></div>
+        </div>
+
+        <blockquote>"If Claude thinks you're trying to start a project or task, it should default into talking through a plan with you before it starts down the path of implementation."<cite>Jesse Vincent · "Superpowers" · Oct 9, 2025</cite></blockquote>
+
+        <p>So when you say something as casual as "let's make a react todo list," a Superpowers-equipped agent doesn't sprint to the keyboard. It steps back, interrogates intent, and turns the conversation into a spec — then a plan detailed enough, in Vincent's memorable phrasing, for "an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow." Only then does code appear, written test-first.</p>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>The acceptance test.</strong> The repo's own definition of a working install is behavioral: that exact "react todo list" prompt must auto-trigger the <code>brainstorming</code> skill. If it doesn't, the bootstrap never loaded and, in the repo's words, "the skills are dead weight — present on disk but never invoked."</p></div>
+
+        <p>This is the lived experience of Superpowers more than any feature list: the moment of restraint between your request and the agent's first line of code. <a href="methods.html">Walk the full lifecycle in The Methods →</a></p>
+      </section>
+
+      <!-- ===================== SELF-IMPROVING ===================== -->
+      <section class="reveal">
+        <h2 id="self-improving">Self-improving skills</h2>
+        <p class="section-intro">The cleverest move in the whole design is recursive: among the very first skills Vincent taught the system was the skill of <em>making skills</em>.</p>
+
+        <blockquote>"One of the first skills I taught Superpowers was How to create skills."<cite>Jesse Vincent · "Superpowers" · Oct 9, 2025</cite></blockquote>
+
+        <p>Once an agent can author and refine its own procedures, learning becomes a workflow rather than a wish. The foundational move is almost startlingly simple:</p>
+
+        <blockquote>"You can hand a model a book or a document or a codebase and say 'Read this. Think about it. Write down the new stuff you learned.' … it is insanely powerful."<cite>Jesse Vincent · "Superpowers" · Oct 9, 2025</cite></blockquote>
+
+        <p>For Vincent this is the most interesting frontier of all — "getting the LLM to create its own skills… is the key to a whole bunch of avenues for agentic self-improvement." And the meta-skill isn't a free-for-all: authoring a skill is itself governed by test-driven development. The rule, stated flatly in <code>writing-skills</code>, is that <em>"Writing skills IS Test-Driven Development applied to process documentation"</em> — new procedures are pressure-tested on fresh subagents, in deliberately adversarial scenarios, until they hold up. The program that writes programs is held to the same standard as everything it produces.</p>
+
+        <div class="callout tip"><div class="ic">✓</div><p><strong>Tested like code.</strong> A skill isn't "done" when it reads well. It's done when a fresh agent, dropped into a high-pressure scenario, picks the right action <em>and</em> cites the skill it followed. Drawing on persuasion research, the repo notes, hardened instructions "more than doubled compliance rates (33% → 72%)."</p></div>
+      </section>
+
+      <!-- ===================== FOUR PARTS ===================== -->
+      <section class="reveal">
+        <h2 id="four-parts">What it is, in four parts</h2>
+        <p class="section-intro">When Vincent breaks the project down himself, it resolves into four cleanly separable layers — a useful map before you dive into the architecture.</p>
+
+        <div class="grid cols-2">
+          <div class="card hover">
+            <h3>① The bootstrap</h3>
+            <p>"A bootstrap that teaches Claude Code to load <code>SKILL.md</code> files and when to use them." Loaded at session start, it's the control layer that makes everything else auto-trigger.</p>
+          </div>
+          <div class="card hover">
+            <h3>② Skills for managing skills</h3>
+            <p>"A set of <code>SKILL.md</code> files designed to create, manage, and share <code>SKILL.md</code> files." The self-referential core — meta-programming made concrete.</p>
+          </div>
+          <div class="card hover">
+            <h3>③ The Architect / Implementer method</h3>
+            <p>Skills that "encode my Architect/Implementer agentic coding methodology, starting from the brainstorming process and running all the way through the TDD process."</p>
+          </div>
+          <div class="card hover">
+            <h3>④ Other engineering skills</h3>
+            <p>"A set of <code>SKILL.md</code> files that encode a bunch of other software engineering skills." The grab-bag of everyday competencies that round out the library.</p>
+          </div>
+        </div>
+
+        <p class="k" style="margin-top:16px">Breakdown paraphrased and quoted from Jesse Vincent, "Skills for Claude!" (Oct 16, 2025).</p>
+
+        <div class="divider-label">From idea to system</div>
+        <p>Those four layers are the bridge from <em>philosophy</em> to <em>structure</em>. The belief — discipline over capability — needs a control layer to enforce it, a way to grow and curate the procedures, a concrete method to encode, and a body of skills to populate it. The next page takes the lid off and shows how the pieces fit together. <a href="architecture.html">See the Architecture →</a></p>
+      </section>
+
+      <!-- ===================== MANTRA ===================== -->
+      <section class="reveal">
+        <h2 id="mantra">The mantra: "Why am I doing this?"</h2>
+        <p class="section-intro">If the project has a beating heart, it's a question — one Vincent surfaced months later while building his favorite new feature.</p>
+
+        <p>By <strong>Superpowers 5</strong> (March 2026), the framework had grown a feature called <strong>Visual Brainstorming</strong>: instead of sketching designs as crude ASCII art, the agent now renders them as real HTML mockups in a local browser. It grew out of a recurring frustration — and led Vincent straight to the idea that, for him, sits above all the tooling.</p>
+
+        <blockquote>"It took me far too long to remember what might be the most important mantra of agentic coding: 'Why am I doing this?'"<cite>Jesse Vincent · "Superpowers 5" · Mar 9, 2026</cite></blockquote>
+
+        <p>It's a fitting capstone, because the whole framework is that question made operational. Brainstorming-before-code asks it. The adversarial spec-review loop — which hunts down "TBD" and "fill this in later" placeholders before they become bugs — asks it. Test-first development asks it. Every gate Superpowers installs is a structured way of forcing the agent (and you) to keep answering it instead of charging ahead.</p>
+
+        <div class="callout quote"><div class="ic">"</div><p><strong>The view from outside.</strong> Independent observer Simon Willison, writing days after launch, summed up why people paid attention.</p></div>
+
+        <blockquote>"There is so much to learn about putting these tools to work in the most effective way possible. Jesse is way ahead of the curve."<cite>Simon Willison · Oct 10, 2025</cite></blockquote>
+
+        <div class="tag-row">
+          <span class="pill">methodology</span>
+          <span class="pill">composable skills</span>
+          <span class="pill accent">discipline over capability</span>
+          <span class="pill">self-improving</span>
+          <span class="pill">brainstorm → plan → implement</span>
+        </div>
+      </section>
+
+      <div class="pager">
+        <a href="index.html"><div class="dir">← Back</div><div class="ttl">Home</div></a>
+        <a class="next" href="architecture.html"><div class="dir">Next →</div><div class="ttl">Architecture</div></a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="col footer-brand">
+      <a class="brand" href="index.html"><span class="glyph"><img src="assets/logo.svg" alt=""></span><b>Superpowers</b></a>
+      <p>An agentic skills framework &amp; software-development methodology that gives coding agents a disciplined process — brainstorm, plan, test-drive, review, ship.</p>
+    </div>
+    <div class="col">
+      <h5>The Wiki</h5>
+      <a href="essence.html">The Essence</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="meta-programming.html">Meta-Programming</a>
+      <a href="methods.html">The Methods</a>
+    </div>
+    <div class="col">
+      <h5>Explore</h5>
+      <a href="brainstorming.html">Brainstorming Engine</a>
+      <a href="examples.html">Steps &amp; Examples</a>
+      <a href="use-cases.html">Use Cases</a>
+      <a href="web-use-cases.html">From the Web</a>
+    </div>
+    <div class="col">
+      <h5>Source</h5>
+      <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">GitHub repo</a>
+      <a href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">Original announcement</a>
+      <a href="https://github.com/obra/superpowers/blob/main/RELEASE-NOTES.md" target="_blank" rel="noopener">Release notes</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>Unofficial documentation wiki · built from the v5.1.0 source tree.</span>
+    <span>Superpowers © Jesse Vincent &amp; Prime Radiant · MIT License</span>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

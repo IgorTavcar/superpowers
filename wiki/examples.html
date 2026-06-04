@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steps &amp; Examples — Superpowers Wiki</title>
+<meta name="description" content="The concrete artifacts of Superpowers: the real TDD task templates, plan headers, review prompts, SHA ranges, branch menus, and command blocks an agent actually runs.">
+<link rel="icon" href="assets/app-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="glyph"><img src="assets/logo.svg" alt=""></span>
+    <b>Superpowers</b>
+    <span class="tag">WIKI</span>
+  </a>
+  <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="essence.html">Essence</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="meta-programming.html">Meta-Programming</a>
+    <a href="methods.html">Methods</a>
+    <a href="brainstorming.html">Brainstorming</a>
+    <a href="examples.html">Examples</a>
+    <a href="use-cases.html">Use Cases</a>
+    <a href="web-use-cases.html">From the Web</a>
+  </nav>
+  <div class="header-right">
+    <a class="gh-link" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">On this page</div>
+      <a href="#tdd-task">Anatomy of a TDD task</a>
+      <a href="#red-green">RED → GREEN → REFACTOR</a>
+      <a href="#plan-header">The mandatory plan header</a>
+      <a href="#two-stage">Two-stage review in practice</a>
+      <a href="#sha-range">Reviewing a SHA range</a>
+      <a href="#finishing">Finishing the branch</a>
+      <a href="#fan-out">Parallel agent fan-out</a>
+      <a href="#root-cause">Root-cause &amp; the verification gate</a>
+    </aside>
+    <div class="content">
+      <div class="hero">
+        <span class="eyebrow">Page 06 · Show me the code</span>
+        <h1 class="page-title">The actual <span class="grad-text">artifacts</span> an agent runs</h1>
+        <p class="lede">No metaphors on this page. These are the real templates, prompt fragments, and command blocks lifted from the skill files themselves — the exact text a Superpowers-equipped agent pastes, runs, and verifies. The methodology lives in this granularity: a task is five checkbox steps, a review is two ordered gates, a "done" is a fresh command output. Read it as a field manual.</p>
+      </div>
+
+      <!-- ============================ 1. TDD TASK ============================ -->
+      <section class="reveal">
+        <h2 id="tdd-task">Anatomy of a bite-sized TDD task</h2>
+        <p class="section-intro">Every task in a Superpowers plan is the same shape. A <strong>Files</strong> block names exactly what to create, modify (with line ranges), and test — then <strong>five checkbox steps</strong> walk the agent through one full red-green cycle. Each step is one action of two to five minutes; nothing is left to interpretation.</p>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>One action per step.</strong> From <code>writing-plans/SKILL.md</code>: "Write the failing test" — step. "Implement the minimal code to make the test pass" — step. "Commit" — step. The plan literally bakes the TDD cycle into the checklist so the executing agent cannot skip a beat.</p></div>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">skills/writing-plans/SKILL.md — Task Structure</span><button class="copy-btn">copy</button></div>
+        <pre><code>### Task N: [Component Name]
+
+**Files:**
+- Create: `exact/path/to/file.py`
+- Modify: `exact/path/to/existing.py:123-145`
+- Test: `tests/exact/path/to/test.py`
+
+- [ ] **Step 1: Write the failing test**
+
+```python
+def test_specific_behavior():
+    result = function(input)
+    assert result == expected
+```
+
+- [ ] **Step 2: Run test to verify it fails**
+
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: FAIL with "function not defined"
+
+- [ ] **Step 3: Write minimal implementation**
+
+```python
+def function(input):
+    return expected
+```
+
+- [ ] **Step 4: Run test to verify it passes**
+
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: PASS
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add tests/path/test.py src/path/file.py
+git commit -m "feat: add specific feature"
+```</code></pre>
+
+        <p>The two <em>Run</em> lines carry an <strong>expected outcome</strong> — <code>FAIL with "function not defined"</code>, then <code>PASS</code> — so the agent has a concrete prediction to check against, not a vague hope. And because each task ends in its own commit, the git history becomes a chain of green checkpoints you can review, bisect, or revert one at a time.</p>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>No placeholders.</strong> The same skill bans <code>TBD</code>, <code>TODO</code>, "add appropriate error handling", "Write tests for the above" without code, and even "Similar to Task N" — "repeat the code — the engineer may be reading tasks out of order."</p></div>
+      </section>
+
+      <!-- ============================ 2. RED GREEN REFACTOR ============================ -->
+      <section class="reveal">
+        <h2 id="red-green">The RED → GREEN → REFACTOR cycle</h2>
+        <p class="section-intro">Those five steps are one pass through the cycle that governs all implementation. The mandatory <em>verify</em> phases — watch it fail, watch it pass — are what separate this from "write a test eventually."</p>
+
+        <div class="flow">
+          <div class="node"><div class="n">01</div><div class="t">RED</div><div class="s">one minimal failing test</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">02</div><div class="t">Verify RED</div><div class="s">fails for the right reason</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">03</div><div class="t">GREEN</div><div class="s">simplest code, YAGNI</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">04</div><div class="t">Verify GREEN</div><div class="s">passes, suite green</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">05</div><div class="t">REFACTOR</div><div class="s">clean up, stay green</div></div>
+        </div>
+
+        <div class="pull">If you didn't watch the test fail, you don't know if it tests the <span>right thing</span>.</div>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>The Iron Law.</strong> <code>test-driven-development/SKILL.md</code> states it without hedging: "NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST." Wrote code before the test? Delete it — "Delete means delete," no keeping it as reference.</p></div>
+
+        <blockquote>"If you didn't watch the test fail, you don't know if it tests the right thing."<cite>test-driven-development/SKILL.md</cite></blockquote>
+
+        <p>The two MANDATORY verify steps catch the two ways TDD silently breaks: a test that passes even before the code exists (it tests nothing), and a test that fails with an <em>error</em> rather than an assertion (it tests the wrong thing). REFACTOR runs only once the bar is green, and it adds no new behavior — clean-up is not an excuse to smuggle in features.</p>
+      </section>
+
+      <!-- ============================ 3. PLAN HEADER ============================ -->
+      <section class="reveal">
+        <h2 id="plan-header">The mandatory plan header</h2>
+        <p class="section-intro">Every plan document opens with a fixed header. It is not decoration — it is the wiring that tells the next agent which sub-skill to invoke, so an idle plan file on disk still knows how it is meant to be executed.</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">skills/writing-plans/SKILL.md — Plan Document Header</span><button class="copy-btn">copy</button></div>
+        <pre><code>&gt; **For agentic workers:** REQUIRED SUB-SKILL: Use
+&gt; superpowers:subagent-driven-development (recommended) or
+&gt; superpowers:executing-plans to implement this plan task-by-task.
+&gt; Steps use checkbox (`- [ ]`) syntax for tracking.</code></pre>
+
+        <p>This is the hinge of the whole loop. <code>brainstorming</code>'s only terminal transition is <code>writing-plans</code>; <code>writing-plans</code> stamps this header; the header names the two executors — <strong>subagent-driven-development</strong> (recommended) or <strong>executing-plans</strong> (inline). Pick one and you are routed into review, verification, and finishing without ever consulting a separate map.</p>
+
+        <div class="callout tip"><div class="ic">✓</div><p><strong>References by name, not by link.</strong> Skills point at each other with the <code>superpowers:skill-name</code> convention rather than <code>@</code>-file links — because <code>@</code> force-loads the file and burns context before it's needed. The header declares the dependency; the agent loads it only when it gets there.</p></div>
+      </section>
+
+      <!-- ============================ 4. TWO-STAGE REVIEW ============================ -->
+      <section class="reveal">
+        <h2 id="two-stage">Two-stage review in practice</h2>
+        <p class="section-intro">Under subagent-driven development, a fresh implementer subagent does each task, then hands off to <strong>two reviewers in a fixed order</strong>: spec-compliance first (built exactly what was asked — nothing more, nothing less), then code-quality (built well). Each reviewer loops fixes back to the same implementer until it returns clean.</p>
+
+        <div class="flow">
+          <div class="node"><div class="n">01</div><div class="t">Implementer</div><div class="s">implement · test · commit</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">02</div><div class="t">Spec Reviewer</div><div class="s">FIRST · ✅ / ❌</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">03</div><div class="t">Quality Reviewer</div><div class="s">SECOND · only if ✅</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">04</div><div class="t">Task Done</div><div class="s">both clean</div></div>
+        </div>
+
+        <p>The implementer returns one of four statuses, so the controller always knows whether to advance, probe, or unblock:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">skills/subagent-driven-development/implementer-prompt.md — Report Format</span><button class="copy-btn">copy</button></div>
+        <pre><code>- **Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT</code></pre>
+
+        <p>Then the spec reviewer opens with an instruction that sets the whole tone of the gate — it is told, in writing, not to take the implementer's word for anything:</p>
+
+        <blockquote>"The implementer finished suspiciously quickly. Their report may be incomplete, inaccurate, or optimistic. You MUST verify everything independently."<cite>subagent-driven-development/spec-reviewer-prompt.md — "Do Not Trust the Report"</cite></blockquote>
+
+        <p>The reviewer reads the actual code line-by-line for missing requirements, extra unrequested work, and misunderstandings, returning <code>✅</code> or <code>❌</code> with a <code>file:line</code> reference. Order is non-negotiable — running the polish review before correctness is one of the skill's explicit Red Flags:</p>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>Red Flag (Never).</strong> "Start code quality review before spec compliance is ✅" — the wrong order. There is no point grading the craftsmanship of code that builds the wrong thing.</p></div>
+      </section>
+
+      <!-- ============================ 5. SHA RANGE ============================ -->
+      <section class="reveal">
+        <h2 id="sha-range">Requesting a review over a SHA range</h2>
+        <p class="section-intro">A reviewer subagent is given a precise <strong>git range</strong>, not the session history — so it reviews the diff that matters and nothing else. The two lines below are how that range is captured.</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">skills/requesting-code-review/SKILL.md</span><button class="copy-btn">copy</button></div>
+        <pre><code>BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
+HEAD_SHA=$(git rev-parse HEAD)</code></pre>
+
+        <p>Those SHAs fill placeholders in <code>code-reviewer.md</code>, the shared reviewer template (the same one the two-stage quality reviewer reuses). The reviewer checks plan alignment, code quality, architecture, testing, and production readiness — then sorts findings into <strong>Critical</strong>, <strong>Important</strong>, and <strong>Minor</strong>. The calibration note keeps that triage honest:</p>
+
+        <blockquote>"Categorize issues by actual severity. Not everything is Critical. Acknowledge what was done well before listing issues — accurate praise helps the implementer trust the rest of the feedback."<cite>requesting-code-review/code-reviewer.md — Calibration</cite></blockquote>
+
+        <div class="callout tip"><div class="ic">✓</div><p><strong>Act by severity.</strong> The requester fixes Critical findings immediately, Important ones before proceeding, and notes Minor ones. The mirror skill — <code>receiving-code-review</code> — governs the other side: verify before implementing, no performative "You're absolutely right!", push back with technical reasoning when the reviewer is wrong.</p></div>
+      </section>
+
+      <!-- ============================ 6. FINISHING ============================ -->
+      <section class="reveal">
+        <h2 id="finishing">Finishing the branch</h2>
+        <p class="section-intro">When tests pass, <code>finishing-a-development-branch</code> presents <strong>exactly four options</strong> — never a default, never a silent merge. The agent verifies, detects the environment, then asks.</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">skills/finishing-a-development-branch/SKILL.md — Step 4</span><button class="copy-btn">copy</button></div>
+        <pre><code>Implementation complete. What would you like to do?
+
+1. Merge back to &lt;base-branch&gt; locally
+2. Push and create a Pull Request
+3. Keep the branch as-is (I'll handle it later)
+4. Discard this work</code></pre>
+
+        <p>Choose option 2 and the agent pushes the branch and opens a PR with a structured body — Summary plus Test Plan — built from a heredoc so the formatting is identical every time:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">skills/finishing-a-development-branch/SKILL.md — Option 2</span><button class="copy-btn">copy</button></div>
+        <pre><code># Push branch
+git push -u origin &lt;feature-branch&gt;
+
+# Create PR
+gh pr create --title "&lt;title&gt;" --body "$(cat &lt;&lt;'EOF'
+## Summary
+&lt;2-3 bullets of what changed&gt;
+
+## Test Plan
+- [ ] &lt;verification steps&gt;
+EOF
+)"</code></pre>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>Provenance-based cleanup.</strong> The PR path deliberately leaves the worktree alive so you can iterate on review feedback. Cleanup happens only for merge and discard, and only for worktrees the framework owns (under <code>.worktrees/</code>, <code>worktrees/</code>, or <code>~/.config/superpowers/worktrees/</code>) — and it always merges first, then removes the worktree, then deletes the branch.</p></div>
+      </section>
+
+      <!-- ============================ 7. FAN-OUT ============================ -->
+      <section class="reveal">
+        <h2 id="fan-out">Parallel agent fan-out</h2>
+        <p class="section-intro">When several failures are genuinely independent — different files, different subsystems, no shared state — <code>dispatching-parallel-agents</code> sends one focused subagent per problem domain, all at once.</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">skills/dispatching-parallel-agents/SKILL.md</span><button class="copy-btn">copy</button></div>
+        <pre><code>Task("Fix agent-tool-abort.test.ts failures")
+Task("Fix batch-completion-behavior.test.ts failures")
+Task("Fix tool-approval-race-conditions.test.ts failures")
+// All three run concurrently</code></pre>
+
+        <p>Each agent gets isolated, self-contained context: a specific scope, a clear goal, explicit constraints (for example, "Do NOT change production code"), and a required summary output. The controller then reads every summary, checks for cross-agent conflicts, runs the full suite to confirm the fixes compose, and spot-checks for systematic errors. In the skill's worked example, three parallel agents fix six failures across three files with zero conflicts.</p>
+
+        <div class="grid cols-2">
+          <div class="card"><h3>Use it when</h3><p>3+ test files fail with different root causes · multiple subsystems broken independently · no shared state between the failures.</p></div>
+          <div class="card"><h3>Don't, when</h3><p>The failures are related · full context is needed · it's exploratory debugging · the failures touch shared state. Then fall back to a single sequential investigation.</p></div>
+        </div>
+      </section>
+
+      <!-- ============================ 8. ROOT CAUSE + VERIFY ============================ -->
+      <section class="reveal">
+        <h2 id="root-cause">Root-cause tracing &amp; the verification gate</h2>
+        <p class="section-intro">For a single stubborn bug, <code>systematic-debugging</code> traces <strong>backward</strong> from the symptom to the original trigger — never patching where the error merely surfaces.</p>
+
+        <blockquote>"NEVER fix just where the error appears. Trace back to find the original trigger."<cite>systematic-debugging/root-cause-tracing.md</cite></blockquote>
+
+        <p>When manual tracing dead-ends — say a stray <code>.git</code> keeps appearing and you can't tell which test creates it — a bisection tool isolates the polluting test by binary-searching the suite:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">skills/systematic-debugging/root-cause-tracing.md — bisection</span><button class="copy-btn">copy</button></div>
+        <pre><code>./find-polluter.sh '.git' 'src/**/*.test.ts'</code></pre>
+
+        <p>Once you have a candidate fix, you do not get to call it fixed. The <code>verification-before-completion</code> gate demands a full red-green confirmation for any regression test — prove the test catches the bug by reverting the fix and watching it fail:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">skills/verification-before-completion/SKILL.md — Regression tests</span><button class="copy-btn">copy</button></div>
+        <pre><code>Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)</code></pre>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>The honesty gate.</strong> "NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE — If you haven't run the verification command in this message, you cannot claim it passes." A "should pass" is not evidence; a "probably" is not evidence; the agent's own success report is not evidence — only fresh output is.</p></div>
+
+        <p>That gate is what makes the rest of the page trustworthy. Every template, every review, every menu ends the same way: not with a confident sentence, but with a command that was actually run and an output that was actually read. <a href="use-cases.html">See where it all gets used →</a></p>
+      </section>
+
+      <div class="pager">
+        <a href="brainstorming.html"><div class="dir">← Prev</div><div class="ttl">The Brainstorming Engine</div></a>
+        <a class="next" href="use-cases.html"><div class="dir">Next →</div><div class="ttl">Use Cases</div></a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="col footer-brand">
+      <a class="brand" href="index.html"><span class="glyph"><img src="assets/logo.svg" alt=""></span><b>Superpowers</b></a>
+      <p>An agentic skills framework &amp; software-development methodology that gives coding agents a disciplined process — brainstorm, plan, test-drive, review, ship.</p>
+    </div>
+    <div class="col">
+      <h5>The Wiki</h5>
+      <a href="essence.html">The Essence</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="meta-programming.html">Meta-Programming</a>
+      <a href="methods.html">The Methods</a>
+    </div>
+    <div class="col">
+      <h5>Explore</h5>
+      <a href="brainstorming.html">Brainstorming Engine</a>
+      <a href="examples.html">Steps &amp; Examples</a>
+      <a href="use-cases.html">Use Cases</a>
+      <a href="web-use-cases.html">From the Web</a>
+    </div>
+    <div class="col">
+      <h5>Source</h5>
+      <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">GitHub repo</a>
+      <a href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">Original announcement</a>
+      <a href="https://github.com/obra/superpowers/blob/main/RELEASE-NOTES.md" target="_blank" rel="noopener">Release notes</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>Unofficial documentation wiki · built from the v5.1.0 source tree.</span>
+    <span>Superpowers © Jesse Vincent &amp; Prime Radiant · MIT License</span>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

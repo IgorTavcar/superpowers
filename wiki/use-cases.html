@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Use Cases — Superpowers Wiki</title>
+<meta name="description" content="Concrete scenarios where Superpowers shines — big multi-file features, spec-first design, autonomous execution, test-enforced fixes, gnarly root causes, parallel fan-out, and disciplined finishes.">
+<link rel="icon" href="assets/app-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="glyph"><img src="assets/logo.svg" alt=""></span>
+    <b>Superpowers</b>
+    <span class="tag">WIKI</span>
+  </a>
+  <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="essence.html">Essence</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="meta-programming.html">Meta-Programming</a>
+    <a href="methods.html">Methods</a>
+    <a href="brainstorming.html">Brainstorming</a>
+    <a href="examples.html">Examples</a>
+    <a href="use-cases.html">Use Cases</a>
+    <a href="web-use-cases.html">From the Web</a>
+  </nav>
+  <div class="header-right">
+    <a class="gh-link" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">On this page</div>
+      <a href="#big-features">Big multi-file features</a>
+      <a href="#spec-first">Spec-first to kill rework</a>
+      <a href="#autonomous">Autonomous task execution</a>
+      <a href="#test-enforced">Test-enforced bug fixes</a>
+      <a href="#root-cause">Hunting a gnarly root cause</a>
+      <a href="#fan-out">Parallel fan-out</a>
+      <a href="#clean-finish">Review &amp; clean finishes</a>
+      <a href="#harnesses">Across harnesses &amp; teams</a>
+      <a href="#not-this">When NOT to use it</a>
+    </aside>
+    <div class="content">
+      <div class="hero">
+        <span class="eyebrow">Page 07 · What it is for</span>
+        <h1 class="page-title">Use Cases: where the <span class="grad-text">discipline pays off</span></h1>
+        <p class="lede">Superpowers is not a magic wand for every keystroke — it's a methodology that earns its keep on work that <em>used to fall apart</em>. Below are the scenarios where practitioners and the repo's own skills converge: each framed as a situation, how the framework handles it, and the payoff. Every claim here is grounded in the skill files and real practitioner reports — not in marketing.</p>
+      </div>
+
+      <section class="reveal">
+        <h2 id="big-features">Shipping big multi-file features</h2>
+        <p class="section-intro">The classic failure mode of stock agentic coding: a feature that touches a dozen files, where the agent loses the thread halfway through and leaves you to reconcile the inconsistencies by hand.</p>
+
+        <div class="grid cols-3">
+          <div class="card">
+            <h3>The situation</h3>
+            <p>Richard Porter describes the old loop bluntly: "describe the feature, hope Claude understood... watch it write code for 10 minutes, then spend an hour fixing the inconsistencies."</p>
+          </div>
+          <div class="card">
+            <h3>How Superpowers handles it</h3>
+            <p>The flow is <strong>brainstorm → write-plan → execute-plan</strong> with TDD. Plans are broken into <strong>12–15 tasks of ~2–5 minutes each</strong>, with file paths and acceptance criteria baked in.</p>
+          </div>
+          <div class="card">
+            <h3>The payoff</h3>
+            <p>Features spanning <strong>15+ files</strong> execute consistently with fewer regressions — because, in Porter's words, "each subagent starts fresh with only the context it needs."</p>
+          </div>
+        </div>
+
+        <blockquote>"Claude literally cannot skip the planning phase or write code before tests."<cite>Richard Joseph Porter</cite></blockquote>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>Why it works.</strong> Context is the scarce resource. A fresh implementer subagent per task means the model never has to hold fifteen files in its head at once — it gets exactly the slice it needs, does one bite-sized job, and hands back a verified commit.</p></div>
+      </section>
+
+      <section class="reveal">
+        <h2 id="spec-first">Spec-first to kill rework</h2>
+        <p class="section-intro">Most wasted agent-hours come from building the wrong thing confidently. The fix is to refuse to build anything until intent is unambiguous.</p>
+
+        <p>The <code>brainstorming</code> skill carries a <strong>HARD-GATE</strong> that forbids any implementation action before you approve a design — and it explicitly rejects the rationalization "this is too simple to need a design." It explores the codebase, asks clarifying questions one at a time, proposes 2–3 approaches with tradeoffs, then writes an <strong>editable Markdown design doc</strong> you can comment on in your own editor before a single line of code exists.</p>
+
+        <blockquote>"Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it."<cite>brainstorming/SKILL.md — the HARD-GATE</cite></blockquote>
+
+        <div class="pull">An hour spent on a spec you actually read beats a day spent unwinding code you never wanted. The doc is <span>the artifact you correct, cheaply</span>, before anything is built.</div>
+
+        <p>Evan Schwartz's "A Rave Review" praises exactly this: being able to weigh in on a concise ~dozen-bullet outline rather than rewriting a multi-page default Plan-mode doc. His verdict is unambiguous.</p>
+
+        <blockquote>"Using Claude Code with Superpowers is so much more productive and the features it builds are so much more correct than with stock Claude Code."<cite>Evan Schwartz, "A Rave Review of Superpowers"</cite></blockquote>
+      </section>
+
+      <section class="reveal">
+        <h2 id="autonomous">Autonomous task execution</h2>
+        <p class="section-intro">Once a plan exists, the goal is to let the agent run without babysitting — and without drifting off-plan. This is where the framework's structure becomes leverage.</p>
+
+        <ol class="steps">
+          <li>
+            <h4>Controller reads the plan once</h4>
+            <p>It extracts every task's full text plus context and builds a TodoWrite list — the subagents never have to read the plan file themselves.</p>
+          </li>
+          <li>
+            <h4>Fresh implementer subagent per task</h4>
+            <p>The controller pastes the full task text into a focused implementer that implements, tests, commits, and self-reviews — then reports one of four statuses: <code>DONE</code>, <code>DONE_WITH_CONCERNS</code>, <code>NEEDS_CONTEXT</code>, or <code>BLOCKED</code>.</p>
+          </li>
+          <li>
+            <h4>Two-stage review keeps it honest</h4>
+            <p>A spec-compliance reviewer runs <strong>first</strong>, a code-quality reviewer <strong>second</strong> — each looping until clean before the task is marked complete.</p>
+          </li>
+        </ol>
+
+        <div class="callout tip"><div class="ic">✓</div><p><strong>The payoff.</strong> Because each task is small, isolated, and gated, the loop can run a long time without supervision while staying on the rails. The plan is the leash — and the agent literally cannot wander off it.</p></div>
+
+        <p>The framework's own principle states the bet plainly:</p>
+        <blockquote>"Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration."<cite>subagent-driven-development/SKILL.md</cite></blockquote>
+      </section>
+
+      <section class="reveal">
+        <h2 id="test-enforced">Test-enforced bug fixes</h2>
+        <p class="section-intro">Agents love to say "I'll write the test after." Under Superpowers, that sentence is not a deferral — it's a deletion order.</p>
+
+        <p>The <code>test-driven-development</code> skill enforces an Iron Law and a hard consequence: write production code before its failing test, and the rule is "Delete it — Delete means delete." The mechanism is the point. As Marc Nuri's analysis puts it, the model can already lecture you on TDD; what it lacks is a mechanism that holds it to those concepts when shortcuts are easier.</p>
+
+        <blockquote>"NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST."<cite>test-driven-development/SKILL.md — The Iron Law</cite></blockquote>
+
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>The discipline IS the feature</h3>
+            <p>The cycle is <strong>Red → Verify-Red → Green → Verify-Green → Refactor</strong>, with a mandatory watch-it-fail step. "If you didn't watch the test fail, you don't know if it tests the right thing."</p>
+          </div>
+          <div class="card">
+            <h3>Regressions get the full cycle</h3>
+            <p>A fix isn't trusted until the test is proven to catch the bug: <code>Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)</code>.</p>
+          </div>
+        </div>
+
+        <blockquote>"[The TDD skill] treats 'I'll write the test after' as grounds to delete the implementation and start over."<cite>Marc Nuri, technical analysis of Superpowers</cite></blockquote>
+      </section>
+
+      <section class="reveal">
+        <h2 id="root-cause">Hunting a gnarly root cause</h2>
+        <p class="section-intro">The bug that makes you want to throw your laptop: a symptom buried deep in the stack, far from its true cause. The <code>systematic-debugging</code> skill forbids the reflexive patch.</p>
+
+        <blockquote>"NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST."<cite>systematic-debugging/SKILL.md — The Iron Law</cite></blockquote>
+
+        <p>The skill's <code>root-cause-tracing.md</code> companion carries a worked example that captures the whole philosophy. A stray <code>.git</code> appeared in <code>packages/core</code>. Rather than deleting the directory and moving on, the trace went <strong>backward through five levels</strong> to the true trigger:</p>
+
+        <div class="flow">
+          <div class="node"><div class="n">01</div><div class="t">.git in packages/core</div><div class="s">the symptom</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">02</div><div class="t">git init in empty cwd</div><div class="s">WorktreeManager</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">03</div><div class="t">Session.create</div><div class="s">passes the bad cwd</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">04</div><div class="t">test reads tempDir</div><div class="s">before beforeEach</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">05</div><div class="t">setupCoreTest</div><div class="s">returns {tempDir:''}</div></div>
+        </div>
+
+        <p>The fix was at the <strong>source</strong> — a getter that throws when accessed too early — <em>plus</em> four layers of defense-in-depth so the bug becomes impossible to reintroduce. When manual tracing dead-ends, the skill reaches for a bisection tool to find which test pollutes shared state:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">find-polluter.sh</span><button class="copy-btn">copy</button></div>
+        <pre><code>./find-polluter.sh '.git' 'src/**/*.test.ts'</code></pre>
+
+        <div class="callout tip"><div class="ic">✓</div><p><strong>The payoff.</strong> Real-world impact from that one investigation: <strong>1847 tests passed, zero pollution.</strong> Trace to the trigger, fix at the source, defend every layer — and the class of bug is gone, not just this instance.</p></div>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>The escalation rule.</strong> If three fixes fail, the skill orders you to <em>stop and question the architecture</em>: "This is NOT a failed hypothesis — this is a wrong architecture." It refuses to let you stack patches on a broken foundation.</p></div>
+      </section>
+
+      <section class="reveal">
+        <h2 id="fan-out">Parallel fan-out for independent failures</h2>
+        <p class="section-intro">When a test suite breaks in several unrelated places at once, sequential debugging is wasted wall-clock time. The <code>dispatching-parallel-agents</code> skill turns that into a fan-out.</p>
+
+        <p>The trigger is specific: <strong>3+ test files failing with different root causes</strong>, multiple subsystems broken independently, and <em>no shared state</em>. The skill groups failures into independent problem domains and dispatches one focused, self-contained agent per domain — concurrently. Its real example fixes <strong>6 failures across 3 files with 3 parallel agents, zero conflicts.</strong></p>
+
+        <pre><code>Task("Fix agent-tool-abort.test.ts failures")
+Task("Fix batch-completion-behavior.test.ts failures")
+Task("Fix tool-approval-race-conditions.test.ts failures")
+// All three run concurrently</code></pre>
+
+        <p>The controller then reads each summary, checks for cross-agent conflicts, runs the full suite to confirm the fixes compose, and spot-checks for systematic errors.</p>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>When NOT to fan out.</strong> The skill is explicit: do <em>not</em> use parallel agents for related failures, when full context is needed, for exploratory debugging, or when failures share state. Those cases fall back to a single sequential investigation.</p></div>
+      </section>
+
+      <section class="reveal">
+        <h2 id="clean-finish">Disciplined code review &amp; clean finishes</h2>
+        <p class="section-intro">A feature isn't done when the code runs — it's done when it's been reviewed honestly and landed cleanly. Two skills govern the endgame.</p>
+
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>Review by severity, no flattery</h3>
+            <p><code>requesting-code-review</code> dispatches a Senior Reviewer over a git SHA range with calibrated severity. <code>receiving-code-review</code> forbids performative agreement entirely.</p>
+          </div>
+          <div class="card">
+            <h3>Finish with exactly four options</h3>
+            <p><code>finishing-a-development-branch</code> re-verifies tests, then presents Merge / Push+PR / Keep / Discard — with provenance-based worktree cleanup so nothing is left dangling.</p>
+          </div>
+        </div>
+
+        <blockquote>"Categorize issues by actual severity. Not everything is Critical. Acknowledge what was done well before listing issues — accurate praise helps the implementer trust the rest of the feedback."<cite>requesting-code-review/code-reviewer.md</cite></blockquote>
+
+        <p>And the reception side is deliberately unsentimental — "You're absolutely right!" is called out as an explicit CLAUDE.md violation. The instruction is blunt: if you catch yourself about to write "Thanks," delete it and state the fix instead. Feedback is evaluated, verified against <em>this</em> codebase, and pushed back on with technical reasoning when the reviewer is wrong.</p>
+
+        <p>The finish itself is a clean menu, not a guess:</p>
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">finishing-a-development-branch — Step 4</span><button class="copy-btn">copy</button></div>
+        <pre><code>Implementation complete. What would you like to do?
+
+1. Merge back to &lt;base-branch&gt; locally
+2. Push and create a Pull Request
+3. Keep the branch as-is (I'll handle it later)
+4. Discard this work</code></pre>
+      </section>
+
+      <section class="reveal">
+        <h2 id="harnesses">Across harnesses &amp; teams</h2>
+        <p class="section-intro">Because the skills are plain Markdown plus a tiny bootstrap, the same methodology travels — and it composes with the parallel-work tooling people actually use.</p>
+
+        <p>Marc Nuri describes the framework as "a directory of fourteen skills, each a single SKILL.md file" with a bootstrap hook under 2,000 tokens, <strong>portable across Claude Code, Cursor, and Copilot CLI.</strong> Practitioners take that portability further: Chandler combines Claude Code + Conductor + Superpowers to run <strong>parallel worktrees across multiple repos</strong>, feeding in Linear/GitHub issues and research, motivated by eliminating the "dead time" of watching a single agent.</p>
+
+        <blockquote>"The planning part of Superpowers is definitely the reason it performs so much better."<cite>Chandler (chand1012), "The best way to do agentic development in 2026"</cite></blockquote>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>It plays well with others.</strong> Some teams stack it: gstack for architectural decision-making, GSD for long-session context stability, and Superpowers for disciplined execution. As one writeup summarizes — "gstack thinks, GSD stabilizes, Superpowers executes."</p></div>
+      </section>
+
+      <section class="reveal">
+        <h2 id="not-this">When NOT to reach for the full ceremony</h2>
+        <p class="section-intro">An honest reference page says where the tool doesn't fit. The five-phase process is leverage on hard problems — and overhead on trivial ones.</p>
+
+        <p>For "fast iterative design work like changing a button color," the five-phase process slows you down. For small, contained fixes, the plan-generation overhead may cost more tokens than just executing — and reviewers note that skills "load fully into context on every invocation," which adds up.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Task shape</th><th>Full ceremony?</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>One-line button-color change</td><td>No</td><td>Plan + review overhead dwarfs the change; pure token cost</td></tr>
+              <tr><td>Small contained bug fix</td><td>Usually not</td><td>Often faster to just execute than to generate a plan</td></tr>
+              <tr><td>Feature spanning 15+ files</td><td>Yes</td><td>Fresh-context subagents prevent the inconsistency tax</td></tr>
+              <tr><td>Gnarly cross-component bug</td><td>Yes</td><td>Root-cause tracing beats hours of symptom-patching</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>The numbers back up the nuance. One benchmark-style writeup found roughly a <strong>14% token cut and a quality boost on complex tasks</strong> — but <strong>no benefit on simple ones</strong>. The lesson isn't "always" or "never"; it's "match the ceremony to the complexity."</p>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>The honest caveat.</strong> Skeptics on Hacker News warn that "without benchmarks or some kind of evaluation... this could make Claude worse." Superpowers is discipline, not a free lunch — its value scales with the difficulty of the work. For a deeper, both-sides look at the reception, see <a href="web-use-cases.html">From the Web</a>.</p></div>
+      </section>
+
+      <div class="pager">
+        <a href="examples.html"><div class="dir">← Prev</div><div class="ttl">Steps &amp; Examples</div></a>
+        <a class="next" href="web-use-cases.html"><div class="dir">Next →</div><div class="ttl">From the Web</div></a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="col footer-brand">
+      <a class="brand" href="index.html"><span class="glyph"><img src="assets/logo.svg" alt=""></span><b>Superpowers</b></a>
+      <p>An agentic skills framework &amp; software-development methodology that gives coding agents a disciplined process — brainstorm, plan, test-drive, review, ship.</p>
+    </div>
+    <div class="col">
+      <h5>The Wiki</h5>
+      <a href="essence.html">The Essence</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="meta-programming.html">Meta-Programming</a>
+      <a href="methods.html">The Methods</a>
+    </div>
+    <div class="col">
+      <h5>Explore</h5>
+      <a href="brainstorming.html">Brainstorming Engine</a>
+      <a href="examples.html">Steps &amp; Examples</a>
+      <a href="use-cases.html">Use Cases</a>
+      <a href="web-use-cases.html">From the Web</a>
+    </div>
+    <div class="col">
+      <h5>Source</h5>
+      <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">GitHub repo</a>
+      <a href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">Original announcement</a>
+      <a href="https://github.com/obra/superpowers/blob/main/RELEASE-NOTES.md" target="_blank" rel="noopener">Release notes</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>Unofficial documentation wiki · built from the v5.1.0 source tree.</span>
+    <span>Superpowers © Jesse Vincent &amp; Prime Radiant · MIT License</span>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

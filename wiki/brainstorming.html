@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Brainstorming Engine — Superpowers Wiki</title>
+<meta name="description" content="The Socratic, one-question-at-a-time brainstorming skill and its zero-dependency live browser companion that streams mockups as you talk.">
+<link rel="icon" href="assets/app-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="glyph"><img src="assets/logo.svg" alt=""></span>
+    <b>Superpowers</b>
+    <span class="tag">WIKI</span>
+  </a>
+  <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="essence.html">Essence</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="meta-programming.html">Meta-Programming</a>
+    <a href="methods.html">Methods</a>
+    <a href="brainstorming.html">Brainstorming</a>
+    <a href="examples.html">Examples</a>
+    <a href="use-cases.html">Use Cases</a>
+    <a href="web-use-cases.html">From the Web</a>
+  </nav>
+  <div class="header-right">
+    <a class="gh-link" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">On this page</div>
+      <a href="#socratic">Socratic by design</a>
+      <a href="#scope">Scope first</a>
+      <a href="#spec">The spec, reviewed twice</a>
+      <a href="#tool-not-mode">A tool, not a mode</a>
+      <a href="#zero-deps">Zero dependencies</a>
+      <a href="#content-state">content/ vs state/</a>
+      <a href="#round-trip">The round trip</a>
+      <a href="#lifecycle">Lifecycle &amp; the turn loop</a>
+    </aside>
+    <div class="content">
+      <div class="hero">
+        <span class="eyebrow">Page 05 · The fun part</span>
+        <h1 class="page-title">The <span class="grad-text">Brainstorming</span> Engine</h1>
+        <p class="lede">Before a single line of code, a Superpowers agent slows down and asks what you're really trying to build. <code>brainstorming</code> is a gated, one-question-at-a-time Socratic method that teases a spec out of the conversation — and, when seeing beats reading, it can spin up a live browser companion that streams mockups at you as you talk. Two parts: a disciplined interview, and a zero-dependency server that turns the chat into a clickable surface.</p>
+      </div>
+
+      <!-- ============================ SOCRATIC ============================ -->
+      <section class="reveal">
+        <h2 id="socratic">Socratic by design</h2>
+        <p class="section-intro"><code>SKILL.md</code> defines brainstorming not as a vibe but as a <strong>method</strong>: a hard-gated checklist of nine ordered tasks, each created as a tracked task so the agent can't skip ahead. The whole point is to convert a fuzzy request into an approved design without ever writing code on a guess.</p>
+
+        <ol class="steps">
+          <li><h4>Explore project context</h4><p>Read the lay of the land before asking anything — what exists, what conventions hold, where this fits.</p></li>
+          <li><h4>Offer the visual companion</h4><p>A single isolated message offering the live browser tool. Nothing else in that message.</p></li>
+          <li><h4>Ask one question at a time</h4><p>Multiple-choice preferred, one question per message. No question barrages.</p></li>
+          <li><h4>Propose 2–3 approaches</h4><p>Each with trade-offs and an explicit recommendation — not a menu, a point of view.</p></li>
+          <li><h4>Present the design in sections</h4><p>Scaled to complexity, getting <strong>approval after each section</strong> before moving on.</p></li>
+          <li><h4>Write &amp; commit the spec</h4><p>To <code>docs/superpowers/specs/YYYY-MM-DD-&lt;topic&gt;-design.md</code>, then commit it.</p></li>
+          <li><h4>Self-review the spec</h4><p>A fresh-eyes pass for placeholders, consistency, scope, and ambiguity.</p></li>
+          <li><h4>Get explicit user review</h4><p>Report the spec path, wait, and loop on requested changes.</p></li>
+          <li><h4>Invoke writing-plans</h4><p>The one and only terminal state — never <code>frontend-design</code>, never <code>mcp-builder</code>.</p></li>
+        </ol>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>The HARD-GATE.</strong> This is the rule that makes brainstorming more than a suggestion:</p></div>
+
+        <blockquote>"Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity."<cite>skills/brainstorming/SKILL.md — HARD-GATE</cite></blockquote>
+
+        <p>There's a named anti-pattern for exactly the excuse you're tempted to make: <em>"this is too simple to need a design."</em> The skill rejects it outright. Every project gets a presented-and-approved design first, full stop.</p>
+
+        <div class="pull">The interview is the product. By the time code is written, the hard decisions are already <span>made, visible, and signed off</span>.</div>
+      </section>
+
+      <!-- ============================ SCOPE ============================ -->
+      <section class="reveal">
+        <h2 id="scope">Scope first</h2>
+        <p class="section-intro">There is no literal "how big is this?" questionnaire. Instead, before refining any detail, the agent makes a scope judgement — because the most expensive mistake is designing one giant thing when you actually asked for three.</p>
+
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>Detect the multi-subsystem request</h3>
+            <p>If a request "describes multiple independent subsystems," the agent is told to <strong>flag this immediately</strong> rather than plowing into details for a monolith that shouldn't exist.</p>
+          </div>
+          <div class="card">
+            <h3>Decompose into sub-projects</h3>
+            <p>Oversized work is broken into independent pieces — their relationships and build order mapped — and <strong>each sub-project gets its own spec → plan → implementation cycle</strong>.</p>
+          </div>
+        </div>
+
+        <div class="callout tip"><div class="ic">✦</div><p><strong>YAGNI, ruthlessly.</strong> The guidance is blunt: "Remove unnecessary features from all designs." Paired with design-for-isolation — small, well-bounded units with one clear purpose — scope discipline keeps each resulting spec to a single plan's worth of work.</p></div>
+      </section>
+
+      <!-- ============================ SPEC ============================ -->
+      <section class="reveal">
+        <h2 id="spec">The spec, reviewed twice</h2>
+        <p class="section-intro">Once a design is approved section by section, it gets written down — and then it gets read twice. Once by the agent with fresh eyes, once by you with a veto.</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">where the spec lands</span></div>
+        <pre><code>docs/superpowers/specs/YYYY-MM-DD-&lt;topic&gt;-design.md   (written, then committed)</code></pre>
+
+        <p>The <strong>self-review</strong> is a deliberate fresh-eyes pass with four checks, fixed inline with no second re-review:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Check</th><th>What it hunts for</th></tr></thead>
+            <tbody>
+              <tr><td>Placeholder scan</td><td>Stray <code>TBD</code> / <code>TODO</code> / vague hand-waving that never got resolved.</td></tr>
+              <tr><td>Internal consistency</td><td>Sections that contradict each other or drift from the agreed approach.</td></tr>
+              <tr><td>Scope</td><td>Does this still fit a single plan, or did it quietly grow into a decomposition?</td></tr>
+              <tr><td>Ambiguity</td><td>Pick one interpretation and <strong>make it explicit</strong> — don't leave a fork for later.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Then the <strong>user-review gate</strong>: the agent reports the spec path, waits, and on any requested change edits the spec and re-runs the review loop. It only proceeds to <code>writing-plans</code> once you've approved. Nothing slips through on momentum.</p>
+      </section>
+
+      <!-- ============================ TOOL NOT MODE ============================ -->
+      <section class="reveal">
+        <h2 id="tool-not-mode">A tool, not a mode</h2>
+        <p class="section-intro">Now the fun half. The visual companion is, in the skill's own framing, <strong>"available as a tool — not a mode."</strong> Turning it on doesn't move the whole conversation into the browser. It's offered exactly once, and then used surgically.</p>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>The offer is isolated.</strong> The message that offers the companion must "contain ONLY the offer above and nothing else" — and it warns you the feature is new, token-intensive, and needs you to open a local URL. No bundling it with a real question.</p></div>
+
+        <p>Even after you accept, the companion doesn't fire on every turn. The agent decides <em>per question</em> with a single test:</p>
+
+        <blockquote>"would the user understand this better by seeing it than reading it?"<cite>skills/brainstorming/SKILL.md</cite></blockquote>
+
+        <div class="grid cols-2">
+          <div class="card hover">
+            <h3>→ Browser</h3>
+            <p><strong>Visual artifacts.</strong> Mockups, wireframes, architecture diagrams, side-by-side comparisons — things that are genuinely clearer as pixels.</p>
+          </div>
+          <div class="card hover">
+            <h3>→ Terminal</h3>
+            <p><strong>Words.</strong> Requirements, conceptual A/B/C choices, trade-off lists, scope. A question about a <em>UI topic</em> isn't automatically a visual question.</p>
+          </div>
+        </div>
+
+        <p>That distinction matters: the test is about the answer's <em>medium</em>, not its subject. "Which color scheme?" might be visual; "should we support themes at all?" is a sentence in the terminal.</p>
+      </section>
+
+      <!-- ============================ ZERO DEPS ============================ -->
+      <section class="reveal">
+        <h2 id="zero-deps">Zero dependencies</h2>
+        <p class="section-intro">The runtime behind the companion is a single file — <code>skills/brainstorming/scripts/server.cjs</code> — a Node HTTP server that imports <strong>nothing but built-ins</strong>: <code>http</code>, <code>crypto</code>, <code>fs</code>, <code>path</code>. The 2026-03-11 redesign that produced it had a stark before-and-after.</p>
+
+        <div class="grid cols-3">
+          <div class="card"><div class="stat"><div class="num">714 → 0</div><div class="lbl">vendored node_modules files, eliminated</div></div></div>
+          <div class="card"><div class="stat"><div class="num">4</div><div class="lbl">built-in modules, nothing else</div></div></div>
+          <div class="card"><div class="stat"><div class="num">1003</div><div class="lbl">close code for an unknown WS opcode</div></div></div>
+        </div>
+
+        <p>Gone are <code>express</code>, <code>ws</code>, and <code>chokidar</code> — replaced by hand-rolled equivalents. The most interesting bit is the <strong>RFC 6455 WebSocket implemented from scratch</strong>. The handshake is the classic SHA-1 dance against the magic GUID:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">server.cjs — the WebSocket handshake</span></div>
+        <pre><code>computeAcceptKey =
+  base64( SHA-1( clientKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" ) )</code></pre>
+
+        <p>From there, <code>encodeFrame</code>/<code>decodeFrame</code> handle all three length encodings (under 126, 16-bit, 64-bit). Server frames go out unmasked; client frames must be masked and are XOR-unmasked on the way in. Only four opcodes are honored — <strong>TEXT, CLOSE, PING, PONG</strong> — and anything unrecognized closes the connection with status <code>1003</code>. The protocol functions are dual-exported so a unit test can drive them, and the server only actually binds a port when <code>require.main === module</code>.</p>
+
+        <div class="callout tip"><div class="ic">✦</div><p><strong>Why bother?</strong> A brainstorming helper that drags 714 third-party files into every session is a liability — supply chain, install time, version drift. A 4-built-in server is something you can read top to bottom and trust. That ethos is the whole framework, distilled: see <a href="architecture.html">Architecture</a>.</p></div>
+      </section>
+
+      <!-- ============================ CONTENT VS STATE ============================ -->
+      <section class="reveal">
+        <h2 id="content-state">content/ vs state/</h2>
+        <p class="section-intro">A companion session lives under <code>&lt;project&gt;/.superpowers/brainstorm/&lt;PID&gt;-&lt;epoch&gt;/</code> (or under <code>/tmp</code> when no <code>--project-dir</code> is given). Inside, the directory is split in two — and the split is the load-bearing design decision.</p>
+
+        <div class="grid cols-2">
+          <div class="card hover">
+            <h3><code>content/</code></h3>
+            <p>The agent-written HTML screens. <code>fs.watch</code> watches this directory, and <code>GET /</code> serves the <strong>newest file by mtime</strong>. This is what the browser actually displays.</p>
+          </div>
+          <div class="card hover">
+            <h3><code>state/</code></h3>
+            <p>Pure IPC: <code>server-info</code>, <code>events</code>, and <code>server-stopped</code> (plus <code>server.pid</code> / <code>server.log</code> from the start script). This is how the agent and server talk.</p>
+          </div>
+        </div>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>Why the peer split.</strong> <code>state/</code> is deliberately a sibling of <code>content/</code>, not a file inside it — because <code>content/</code> is served over HTTP and <code>state/</code> must <em>never</em> be. Keeping the click-event log and IPC files out of the served tree means a stray request can't ever leak the brainstorm's internal state to the browser.</p></div>
+
+        <p>This is also a spot where the shipped engine has quietly outrun its own spec: the 2026-03-11 design described a single flat <code>SCREEN_DIR</code> with hidden dotfiles (<code>.events</code>, <code>.server-info</code>). The code that actually shipped promoted those to a non-hidden <code>state/</code> peer and added <code>server-stopped</code>. Before every write, the agent checks that <code>state/server-info</code> exists and <code>state/server-stopped</code> does not.</p>
+      </section>
+
+      <!-- ============================ ROUND TRIP ============================ -->
+      <section class="reveal">
+        <h2 id="round-trip">The round trip</h2>
+        <p class="section-intro">Here's the whole loop, end to end — agent to server to browser to click and back. It's a tidy little event-driven pipeline built entirely out of files and a WebSocket.</p>
+
+        <div class="flow">
+          <div class="node"><div class="n">01</div><div class="t">Agent writes</div><div class="s">HTML → content/</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">02</div><div class="t">fs.watch</div><div class="s">debounced 100ms</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">03</div><div class="t">Broadcast</div><div class="s">{type:'reload'}</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">04</div><div class="t">Browser reloads</div><div class="s">helper.js</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">05</div><div class="t">User clicks</div><div class="s">[data-choice]</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">06</div><div class="t">Append</div><div class="s">→ state/events</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">07</div><div class="t">Agent reads</div><div class="s">next turn</div></div>
+        </div>
+
+        <p>The watcher is debounced ~100ms and keyed off a <code>knownFiles</code> set rather than the event type — because macOS reports <code>'rename'</code> for both brand-new files and overwrites. On a genuinely new screen it clears the stale <code>state/events</code> log; either way it broadcasts a reload:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">server.cjs — fs.watch handler</span></div>
+        <pre><code>if (!knownFiles.has(filename)) {
+  knownFiles.add(filename);
+  const eventsFile = path.join(STATE_DIR, 'events');
+  if (fs.existsSync(eventsFile)) fs.unlinkSync(eventsFile);
+  console.log(JSON.stringify({ type: 'screen-added', file: filePath }));
+} else {
+  console.log(JSON.stringify({ type: 'screen-updated', file: filePath }));
+}
+
+broadcast({ type: 'reload' });</code></pre>
+
+        <p>When the browser re-fetches <code>/</code>, the server reads the newest screen and decides whether to pass it through or dress it up. A full document (it starts with <code>&lt;!doctype</code> or <code>&lt;html&gt;</code>) is served as-is; a bare fragment gets dropped into <code>frame-template.html</code>'s <code>&lt;!-- CONTENT --&gt;</code> slot — and either way, <code>helper.js</code> is injected before <code>&lt;/body&gt;</code>:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">server.cjs — GET /</span></div>
+        <pre><code>const screenFile = getNewestScreen();
+let html = screenFile
+  ? (raw =&gt; isFullDocument(raw) ? raw : wrapInFrame(raw))(fs.readFileSync(screenFile, 'utf-8'))
+  : WAITING_PAGE;</code></pre>
+
+        <p>On the client, <code>helper.js</code> opens <code>ws://host</code>, reloads on a <code>'reload'</code> message, and reconnects after 1s if the socket drops — buffering any events in an <code>eventQueue</code> until the connection is back. A single document-level click listener walks up to the nearest <code>[data-choice]</code> ancestor and fires the selection:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">helper.js — click capture</span></div>
+        <pre><code>const target = e.target.closest('[data-choice]');
+if (!target) return;
+
+sendEvent({
+  type: 'click',
+  text: target.textContent.trim(),
+  choice: target.dataset.choice,
+  id: target.id || null
+});</code></pre>
+
+        <p>Back on the server, <code>handleMessage</code> stamps activity, logs the event, and appends it to <code>state/events</code> — but <strong>only if it actually carries a choice</strong>, so idle hover noise never pollutes the log the agent reads:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">server.cjs — handleMessage</span></div>
+        <pre><code>touchActivity();
+console.log(JSON.stringify({ source: 'user-event', ...event }));
+if (event.choice) {
+  const eventsFile = path.join(STATE_DIR, 'events');
+  fs.appendFileSync(eventsFile, JSON.stringify(event) + '\n');
+}</code></pre>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>The companion in one sentence,</strong> from <code>visual-companion.md</code>: "The server watches a directory for HTML files and serves the newest one to the browser. You write HTML content to <code>screen_dir</code>, the user sees it in their browser and can click to select options. Selections are recorded to <code>state_dir/events</code> that you read on your next turn."</p></div>
+      </section>
+
+      <!-- ============================ LIFECYCLE ============================ -->
+      <section class="reveal">
+        <h2 id="lifecycle">Lifecycle &amp; the turn loop</h2>
+        <p class="section-intro">A long-lived local server tied to an agent session needs to die gracefully — when the agent's gone, or when the conversation's gone quiet. A 60-second supervisor handles both.</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">server.cjs — lifecycle supervisor</span></div>
+        <pre><code>function ownerAlive() {
+  if (!ownerPid) return true;
+  try { process.kill(ownerPid, 0); return true; } catch (e) { return e.code === 'EPERM'; }
+}
+
+// Check every 60s: exit if owner process died or idle for 30 minutes
+const lifecycleCheck = setInterval(() =&gt; {
+  if (!ownerAlive()) shutdown('owner process exited');
+  else if (Date.now() - lastActivity &gt; IDLE_TIMEOUT_MS) shutdown('idle timeout');
+}, 60 * 1000);</code></pre>
+
+        <p>The owner PID is the <strong>harness</strong> — resolved by <code>start-server.sh</code> as the grandparent of the script, since <code>$PPID</code> is just the ephemeral shell that launched it. <code>touchActivity()</code> resets the 30-minute idle clock on every HTTP request, every WebSocket message, and every screen change. On shutdown the server cleans up after itself:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">server.cjs — shutdown</span></div>
+        <pre><code>fs.writeFileSync(
+  path.join(STATE_DIR, 'server-stopped'),
+  JSON.stringify({ reason, timestamp: Date.now() }) + '\n'
+);</code></pre>
+
+        <p>If the owner PID is already dead at startup — common under WSL, Tailscale SSH, or cross-user setups where the reaper has moved on — monitoring is disabled and only the idle timeout applies. <code>stop-server.sh</code> escalates SIGTERM → SIGKILL and only <code>rm -rf</code>'s <code>/tmp</code> sessions, preserving the persistent <code>.superpowers/</code> mockups you might want to keep.</p>
+
+        <div class="divider-label">The non-blocking turn loop</div>
+
+        <p>The most important design lesson here isn't in the server at all — it's in what got <strong>deleted</strong>. The 2026-02-19 refactor diagnosed that the previous design ran a blocking <code>wait-for-feedback.sh</code> on <code>TaskOutput(block=true, timeout=600s)</code>, which seized the TUI so the user literally couldn't type to Claude while it waited.</p>
+
+        <blockquote>There is "no way for Claude to listen on two channels simultaneously within a single turn."<cite>2026-02-19 visual-brainstorming refactor design</cite></blockquote>
+
+        <p>Because Claude Code is <strong>turn-based</strong>, the fix was structural: delete <code>wait-for-feedback.sh</code>, make the browser a pure <em>display</em>, and let the terminal stay the always-open channel — bridged by the per-screen <code>events</code> file.</p>
+
+        <ol class="steps">
+          <li><h4>Write a fresh screen</h4><p>A new, semantically named HTML file via the Write tool — never reuse names, never <code>cat</code>/heredoc.</p></li>
+          <li><h4>Summarize &amp; end the turn</h4><p>Tell the user the URL plus a one-line summary, then yield. The terminal is now free.</p></li>
+          <li><h4>Read events next turn</h4><p>On the next turn, read <code>state/events</code> (the click stream) and merge it with whatever the user typed in the terminal.</p></li>
+          <li><h4>Iterate or advance</h4><p>Push <code>waiting.html</code> to clear stale content when returning to terminal-only questions, then go again.</p></li>
+        </ol>
+
+        <div class="pull">Browser as display, terminal as channel, an <span>events file as the bridge</span> — that's the whole secret to a live companion that never blocks the conversation.</div>
+
+        <div class="tag-row">
+          <span class="pill">zero-dependency</span>
+          <span class="pill">RFC 6455</span>
+          <span class="pill accent">turn-based</span>
+          <span class="pill">fs.watch</span>
+          <span class="pill">Socratic</span>
+          <span class="pill accent">HARD-GATE</span>
+        </div>
+      </section>
+
+      <div class="pager">
+        <a href="methods.html"><div class="dir">← Prev</div><div class="ttl">The Methods</div></a>
+        <a class="next" href="examples.html"><div class="dir">Next →</div><div class="ttl">Steps &amp; Examples</div></a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="col footer-brand">
+      <a class="brand" href="index.html"><span class="glyph"><img src="assets/logo.svg" alt=""></span><b>Superpowers</b></a>
+      <p>An agentic skills framework &amp; software-development methodology that gives coding agents a disciplined process — brainstorm, plan, test-drive, review, ship.</p>
+    </div>
+    <div class="col">
+      <h5>The Wiki</h5>
+      <a href="essence.html">The Essence</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="meta-programming.html">Meta-Programming</a>
+      <a href="methods.html">The Methods</a>
+    </div>
+    <div class="col">
+      <h5>Explore</h5>
+      <a href="brainstorming.html">Brainstorming Engine</a>
+      <a href="examples.html">Steps &amp; Examples</a>
+      <a href="use-cases.html">Use Cases</a>
+      <a href="web-use-cases.html">From the Web</a>
+    </div>
+    <div class="col">
+      <h5>Source</h5>
+      <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">GitHub repo</a>
+      <a href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">Original announcement</a>
+      <a href="https://github.com/obra/superpowers/blob/main/RELEASE-NOTES.md" target="_blank" rel="noopener">Release notes</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>Unofficial documentation wiki · built from the v5.1.0 source tree.</span>
+    <span>Superpowers © Jesse Vincent &amp; Prime Radiant · MIT License</span>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

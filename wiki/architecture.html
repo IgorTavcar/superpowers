@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture — Superpowers Wiki</title>
+<meta name="description" content="The technical design of Superpowers: one zero-dependency skill library, a session-start bootstrap, and a CMD/bash polyglot that makes the same Markdown skills portable across six agent harnesses.">
+<link rel="icon" href="assets/app-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="glyph"><img src="assets/logo.svg" alt=""></span>
+    <b>Superpowers</b>
+    <span class="tag">WIKI</span>
+  </a>
+  <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="essence.html">Essence</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="meta-programming.html">Meta-Programming</a>
+    <a href="methods.html">Methods</a>
+    <a href="brainstorming.html">Brainstorming</a>
+    <a href="examples.html">Examples</a>
+    <a href="use-cases.html">Use Cases</a>
+    <a href="web-use-cases.html">From the Web</a>
+  </nav>
+  <div class="header-right">
+    <a class="gh-link" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">On this page</div>
+      <a href="#two-pillars">Two pillars of a real integration</a>
+      <a href="#layout">Repository layout</a>
+      <a href="#bootstrap">The SessionStart bootstrap</a>
+      <a href="#polyglot">run-hook.cmd: a CMD/bash polyglot</a>
+      <a href="#opencode">OpenCode: a JS plugin, not a hook</a>
+      <a href="#tool-mapping">One skill, every harness</a>
+      <a href="#lockstep">Version lockstep &amp; Codex delivery</a>
+      <a href="#recap">The mechanisms, recapped</a>
+    </aside>
+    <div class="content">
+      <div class="hero">
+        <span class="eyebrow">Page 02 · How it is built</span>
+        <h1 class="page-title">Architecture &amp; <span class="grad-text">cross-harness portability</span></h1>
+        <p class="lede">Superpowers is a zero-dependency <strong>skill library plus bootstrap</strong> that installs across six coding-agent harnesses — Claude Code, OpenAI Codex, Cursor, Gemini CLI, GitHub Copilot CLI, and OpenCode — from a single canonical repo. One folder of Markdown is the source of truth; everything else is a thin adapter that teaches a given harness to find those skills and inject them at the right moment. This page is the engineering tour: the manifests, the polyglot hook, the three-branch JSON emitter, and the tool-name maps that let the same skill run everywhere.</p>
+      </div>
+
+      <!-- ============================ TWO PILLARS ============================ -->
+      <section class="reveal">
+        <h2 id="two-pillars">Two pillars of a real integration</h2>
+        <p class="section-intro">The contributor guide (<code>CLAUDE.md</code>, symlinked as <code>AGENTS.md</code>) doesn't leave "integration" to taste. It codifies the architecture as policy: a harness is only really integrated when it does two things.</p>
+
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>① Discover the skills</h3>
+            <p>The harness must find the <code>skills/</code> directory and expose its 14 skills through a native skill tool. For hook-native harnesses this is automatic from the installed plugin; OpenCode reaches the same outcome by appending the path in JavaScript.</p>
+          </div>
+          <div class="card">
+            <h3>② Inject the bootstrap</h3>
+            <p>At session start the harness must load the <code>using-superpowers</code> bootstrap — the introduction that makes the agent reach for skills unprompted. Discovery without injection is inert.</p>
+          </div>
+        </div>
+
+        <p>Pillar two is the one teams get wrong, and the guide is blunt about why it matters:</p>
+
+        <blockquote>"A real integration loads the <code>using-superpowers</code> bootstrap at session start. The bootstrap is what causes skills to auto-trigger at the right moments. Without it, the skills are dead weight — present on disk but never invoked."<cite>CLAUDE.md</cite></blockquote>
+
+        <div class="callout tip">
+          <div class="ic">✓</div>
+          <p><strong>The acceptance test.</strong> Any new harness has to pass one concrete check: send <em>"Let's make a react todo list"</em> in a clean session and confirm the <code>brainstorming</code> skill auto-triggers <em>before</em> any code is written. If the agent jumps straight to scaffolding a project, the bootstrap isn't landing.</p>
+        </div>
+
+        <p>The guide also draws hard lines around what is <em>not</em> a real integration: copying skill files in by hand, <code>npx</code>-style runtime shims, or per-session opt-in are all explicitly rejected. Two further rules round out the policy — zero third-party runtime dependencies, and every skill change must keep working across <em>all</em> supported harnesses, with PRs targeting the <code>dev</code> branch.</p>
+      </section>
+
+      <!-- ============================ LAYOUT ============================ -->
+      <section class="reveal">
+        <h2 id="layout">Repository layout</h2>
+        <p class="section-intro">The repo is deliberately flat: one canonical skill library at the center, ringed by per-harness adapter manifests and the supporting machinery (hooks, scripts, docs, tests, assets).</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">superpowers/ (tree)</span><button class="copy-btn">copy</button></div>
+        <pre><code>superpowers/
+├─ .claude-plugin/      plugin.json + marketplace.json   (Claude Code)
+├─ .codex-plugin/       plugin.json (rich interface block) (OpenAI Codex)
+├─ .cursor-plugin/      plugin.json                       (Cursor)
+├─ .opencode/           plugins/superpowers.js            (OpenCode)
+├─ gemini-extension.json                                  (Gemini CLI)
+├─ package.json         "main" → the OpenCode plugin
+├─ CLAUDE.md   AGENTS.md→CLAUDE.md   GEMINI.md            (context files)
+├─ hooks/      hooks.json · hooks-cursor.json · run-hook.cmd · session-start
+├─ skills/     14 skill dirs, each a SKILL.md (+ references/, scripts/, *-prompt.md)
+├─ scripts/    bump-version.sh · sync-to-codex-plugin.sh
+├─ docs/       README.opencode.md · testing.md · windows/ · plans/ · specs/
+├─ tests/      per-harness suites (claude-code, opencode, skill-triggering, …)
+└─ assets/     app-icon.png · superpowers-small.svg</code></pre>
+
+        <p>The <code>skills/</code> directory holds the entire library as sibling folders — <code>brainstorming</code>, <code>writing-plans</code>, <code>executing-plans</code>, <code>test-driven-development</code>, <code>systematic-debugging</code>, <code>using-git-worktrees</code>, <code>subagent-driven-development</code>, <code>dispatching-parallel-agents</code>, <code>requesting-code-review</code>, <code>receiving-code-review</code>, <code>verification-before-completion</code>, <code>finishing-a-development-branch</code>, <code>writing-skills</code>, and the eager-loaded <code>using-superpowers</code>. Each is a <code>SKILL.md</code> with YAML frontmatter plus optional <code>references/</code>, <code>scripts/</code> (the brainstorming skill even ships a zero-dependency <code>server.cjs</code> visual companion), and <code>*-prompt.md</code> subagent templates.</p>
+
+        <div class="callout note">
+          <div class="ic">★</div>
+          <p><strong>Adapters are thin on purpose.</strong> Five of the six harnesses are just a manifest file at the repo root. Only OpenCode needs real code — and even that is one JavaScript file. The library never forks per harness; the adapters bend each harness toward the library.</p>
+        </div>
+      </section>
+
+      <!-- ============================ BOOTSTRAP ============================ -->
+      <section class="reveal">
+        <h2 id="bootstrap">The SessionStart bootstrap</h2>
+        <p class="section-intro">The heart of portability is a single bash script, <code>hooks/session-start</code>. It reads the bootstrap skill, escapes it, wraps it in an unmissable envelope, and then emits one of three different JSON shapes depending on which harness is calling it.</p>
+
+        <p>First it reads <code>skills/using-superpowers/SKILL.md</code>, JSON-escapes the text (single C-level passes for backslash, quote, newline, carriage return, and tab), and wraps the result in an <code>&lt;EXTREMELY_IMPORTANT&gt;</code> envelope:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">hooks/session-start — the envelope</span><button class="copy-btn">copy</button></div>
+        <pre><code>session_context="&lt;EXTREMELY_IMPORTANT&gt;
+You have superpowers.
+
+**Below is the full content of your 'superpowers:using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**
+
+${using_superpowers_escaped}
+
+${warning_escaped}
+&lt;/EXTREMELY_IMPORTANT&gt;"</code></pre>
+
+        <p>Then comes the portability trick. Different harnesses read session context from different JSON keys, so the script inspects environment variables and prints exactly the shape the current platform expects — using <code>printf</code> rather than a heredoc, because a heredoc triggers a hang on bash 5.3+ (issue #571):</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">hooks/session-start — the three-way branch</span><button class="copy-btn">copy</button></div>
+        <pre><code>if [ -n "${CURSOR_PLUGIN_ROOT:-}" ]; then
+    ...  printf '{\n  "additional_context": "%s"\n}\n' ...
+elif [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] &amp;&amp; [ -z "${COPILOT_CLI:-}" ]; then
+    ...  "hookSpecificOutput" ...
+else
+    ...  "additionalContext"  # Copilot sets COPILOT_CLI=1, or unknown (SDK standard)</code></pre>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Detected by</th><th>Harness</th><th>JSON shape emitted</th></tr></thead>
+            <tbody>
+              <tr><td><code>CURSOR_PLUGIN_ROOT</code> set</td><td>Cursor</td><td><code>{ "additional_context": … }</code></td></tr>
+              <tr><td><code>CLAUDE_PLUGIN_ROOT</code> set, <code>COPILOT_CLI</code> unset</td><td>Claude Code</td><td><code>{ "hookSpecificOutput": { "hookEventName": "SessionStart", "additionalContext": … } }</code></td></tr>
+              <tr><td>fallback (<code>COPILOT_CLI=1</code>, or unknown)</td><td>Copilot / SDK</td><td><code>{ "additionalContext": … }</code> (top level)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>The hook manifests select the event window. <code>hooks/hooks.json</code> fires on <code>startup|clear|compact</code>; <code>hooks/hooks-cursor.json</code> uses a lowercase <code>sessionStart</code> on a version-1 schema. Both invoke the same command, quoted so paths with spaces survive:</p>
+
+        <pre><code>"command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd\" session-start"</code></pre>
+
+        <p>The script also detects a legacy <code>~/.config/superpowers/skills</code> install and folds a one-time migration warning into the same envelope.</p>
+      </section>
+
+      <!-- ============================ POLYGLOT ============================ -->
+      <section class="reveal">
+        <h2 id="polyglot">run-hook.cmd: a CMD/bash polyglot</h2>
+        <p class="section-intro">Notice the command above points at <code>run-hook.cmd</code>, not the bash script directly. That one file is a genuine polyglot — valid input for both <code>cmd.exe</code> and <code>bash</code> — so the same hook entry works on Windows and Unix without branching in the manifest.</p>
+
+        <p>The first line, <code>: &lt;&lt; 'CMDBLOCK'</code>, makes bash swallow the entire Windows batch block as a no-op heredoc, while <code>cmd.exe</code> runs that block and ignores everything after it. The header even documents itself:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">hooks/run-hook.cmd</span><button class="copy-btn">copy</button></div>
+        <pre><code>: &lt;&lt; 'CMDBLOCK'
+@echo off
+REM Cross-platform polyglot wrapper for hook scripts.
+REM On Windows: cmd.exe runs the batch portion, which finds and calls bash.
+REM On Unix: the shell interprets this as a script (: is a no-op in bash).
+...
+REM Try Git for Windows bash in standard locations
+if exist "C:\Program Files\Git\bin\bash.exe" ( ... )
+if exist "C:\Program Files (x86)\Git\bin\bash.exe" ( ... )
+REM Try bash on PATH (e.g. user-installed Git Bash, MSYS2, Cygwin)
+where bash &gt;nul 2&gt;nul
+...
+REM No bash found - exit silently rather than error
+exit /b 0
+CMDBLOCK
+
+# Unix: run the named script directly
+exec bash "${SCRIPT_DIR}/${SCRIPT_NAME}" "$@"</code></pre>
+
+        <p>On Windows the batch block probes <code>C:\Program Files\Git\bin\bash.exe</code>, then the <code>(x86)</code> path, then <code>where bash</code> — and if none of those resolve, it <strong>exits 0 silently</strong>. The plugin still installs and works; it just won't get the session-start context injection. On Unix the colon no-op lets execution fall through to the <code>exec bash</code> line.</p>
+
+        <div class="callout note">
+          <div class="ic">★</div>
+          <p><strong>Two small details make it robust.</strong> Hook filenames are <em>extensionless</em> (<code>session-start</code>, not <code>session-start.sh</code>) because Claude Code's Windows auto-detection prepends <code>bash</code> to any command containing <code>.sh</code> — the bare name avoids a double-wrap. And <code>.gitattributes</code> forces LF line endings on <code>hooks/session-start</code> and <code>*.cmd</code>, so the polyglot stays parseable by both interpreters even after a Windows checkout.</p>
+        </div>
+      </section>
+
+      <!-- ============================ OPENCODE ============================ -->
+      <section class="reveal">
+        <h2 id="opencode">OpenCode: a JS plugin, not a hook</h2>
+        <p class="section-intro">OpenCode is the one harness that can't use the shell-hook path, so it gets the only real adapter code in the tree — a JavaScript plugin wired through <code>package.json</code>.</p>
+
+        <pre><code>"main": ".opencode/plugins/superpowers.js"</code></pre>
+
+        <p>The plugin exports two hooks. The <strong>config</strong> hook pushes the absolute <code>skills/</code> path into <code>config.skills.paths</code>, so skills are discovered without symlinks — this works because OpenCode's <code>Config.get()</code> is a cached singleton. The second hook, <code>experimental.chat.messages.transform</code>, handles injection by unshifting the bootstrap onto the first <em>user</em> message:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">.opencode/plugins/superpowers.js</span><button class="copy-btn">copy</button></div>
+        <pre><code>const firstUser = output.messages.find(m =&gt; m.info.role === 'user');
+...
+// double-injection guard
+if (firstUser.parts.some(p =&gt; p.type === 'text' &amp;&amp; p.text.includes('EXTREMELY_IMPORTANT'))) return;
+const ref = firstUser.parts[0];
+firstUser.parts.unshift({ ...ref, type: 'text', text: bootstrap });</code></pre>
+
+        <p>The design choices here are all hard-won. It injects as a <strong>user-message, not a system-message</strong>, deliberately: per issue #750 a system injection caused per-turn token bloat, and per #894 multiple system messages break Qwen. The bootstrap is built once and <strong>module-cached</strong> (<code>_bootstrapCache</code>, per #1202) because the transform hook fires on every agent step. A guard skips re-injection when the first user message already contains <code>EXTREMELY_IMPORTANT</code>. The JS even embeds its own OpenCode tool map inline, and install is via the <code>opencode.json</code> plugin array with a <code>git+https</code> spec.</p>
+      </section>
+
+      <!-- ============================ TOOL MAPPING ============================ -->
+      <section class="reveal">
+        <h2 id="tool-mapping">One skill, every harness</h2>
+        <p class="section-intro">The same skill Markdown runs on six harnesses because it is authored in exactly one vocabulary — Claude Code's tool names (<code>Read</code>, <code>Write</code>, <code>Edit</code>, <code>Bash</code>, <code>Grep</code>, <code>Glob</code>, <code>Task</code>, <code>TodoWrite</code>, <code>Skill</code>) — and each non-Claude harness gets a small mapping table the agent consults at execution time.</p>
+
+        <p>The bootstrap skill states the rule plainly and points each platform at its table:</p>
+
+        <blockquote>"Skills use Claude Code tool names. Non-CC platforms: see <code>references/copilot-tools.md</code> (Copilot CLI), <code>references/codex-tools.md</code> (Codex) for tool equivalents. Gemini CLI users get the tool mapping loaded automatically via GEMINI.md."<cite>using-superpowers/SKILL.md</cite></blockquote>
+
+        <p>Gemini is the elegant case: no hook at all. <code>gemini-extension.json</code> declares <code>contextFileName: GEMINI.md</code>, and <code>GEMINI.md</code> is just two <code>@</code>-imports that pull the bootstrap and the tool map straight into context:</p>
+
+        <pre><code>@./skills/using-superpowers/SKILL.md
+@./skills/using-superpowers/references/gemini-tools.md</code></pre>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Harness</th><th>How skills load</th><th>Notable tool remaps</th></tr></thead>
+            <tbody>
+              <tr><td>Claude Code</td><td>SessionStart hook → <code>hookSpecificOutput</code>; <code>Skill</code> tool</td><td>— (authoring vocabulary)</td></tr>
+              <tr><td>Cursor</td><td>Hook → <code>additional_context</code>; native skill tool</td><td>— (Claude-family tools)</td></tr>
+              <tr><td>OpenAI Codex</td><td>Hook fallback + synced plugin; native skill tool</td><td><code>Task</code> → <code>spawn_agent</code> / <code>wait_agent</code> / <code>close_agent</code> (needs <code>multi_agent=true</code>); <code>TodoWrite</code> → <code>update_plan</code></td></tr>
+              <tr><td>Gemini CLI</td><td><code>GEMINI.md</code> <code>@</code>-imports (no hook); <code>activate_skill</code></td><td><code>Edit</code> → <code>replace</code>, <code>Read</code> → <code>read_file</code>, <code>Bash</code> → <code>run_shell_command</code>, <code>Task</code> → <code>@generalist</code></td></tr>
+              <tr><td>Copilot CLI</td><td>Hook fallback → top-level <code>additionalContext</code>; <code>skill</code> tool</td><td><code>Read</code> → <code>view</code>, <code>Write</code> → <code>create</code>, <code>Edit</code> → <code>edit</code>, <code>TodoWrite</code> → <code>sql</code> on a todos table</td></tr>
+              <tr><td>OpenCode</td><td>JS plugin: config path + first-user-message inject</td><td>inline tool map embedded in <code>superpowers.js</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>The agent substitutes each Claude tool reference for its local equivalent on the fly. For skills that dispatch subagents, the harness mapping is supplemented by <code>*-prompt.md</code> templates the agent fills in and hands to that harness's native subagent system — so a parallel-agent skill works whether the underlying primitive is Codex's <code>spawn_agent</code> or Gemini's <code>@generalist</code>.</p>
+      </section>
+
+      <!-- ============================ LOCKSTEP ============================ -->
+      <section class="reveal">
+        <h2 id="lockstep">Version lockstep &amp; Codex delivery</h2>
+        <p class="section-intro">Six manifests that must agree on a version number is a recipe for drift. Superpowers solves it with a declarative manifest and a single bump script — and uses a separate sync script to deliver skills into the OpenAI Codex marketplace.</p>
+
+        <p><code>.version-bump.json</code> names the six fields that must stay identical, and <code>scripts/bump-version.sh</code> bumps them all at once with drift detection and an <code>--audit</code> repo grep:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">.version-bump.json</span><button class="copy-btn">copy</button></div>
+        <pre><code>"files": [
+  { "path": "package.json",                    "field": "version" },
+  { "path": ".claude-plugin/plugin.json",      "field": "version" },
+  { "path": ".cursor-plugin/plugin.json",      "field": "version" },
+  { "path": ".codex-plugin/plugin.json",       "field": "version" },
+  { "path": ".claude-plugin/marketplace.json", "field": "plugins.0.version" },
+  { "path": "gemini-extension.json",           "field": "version" }
+]</code></pre>
+
+        <p>Codex is a special case because <code>.codex-plugin/</code> only commits a <code>plugin.json</code> (carrying a rich <code>interface</code> block — <code>displayName</code>, capabilities, <code>defaultPrompt</code>, <code>brandColor</code>, composer icon/logo from <code>assets/</code>). The skills themselves are delivered by <code>scripts/sync-to-codex-plugin.sh</code>, which mirrors the repo into the OpenAI marketplace fork <code>prime-radiant-inc/openai-codex-plugins</code> at <code>plugins/superpowers</code>:</p>
+
+        <ol class="steps">
+          <li><h4>Clone &amp; rsync</h4><p>Copies tracked upstream content into <code>plugins/superpowers</code>, <strong>excluding</strong> all non-Codex harness infra — <code>.claude-plugin/</code>, <code>.cursor-plugin/</code>, <code>.opencode/</code>, <code>hooks/</code>, <code>docs/</code>, <code>tests/</code>, <code>scripts/</code>, <code>GEMINI.md</code>, <code>gemini-extension.json</code>, <code>package.json</code>.</p></li>
+          <li><h4>Preserve OpenAI metadata</h4><p>Keeps any OpenAI-owned <code>skills/*/agents/openai.yaml</code> files already in the destination.</p></li>
+          <li><h4>Branch, push, PR</h4><p>Commits the sync to a branch and opens a deterministic pull request — the channel through which Codex receives skills despite committing only a manifest in-repo.</p></li>
+        </ol>
+
+        <p>The Cursor manifest is the other outlier: it uniquely declares <code>agents/</code> and <code>commands/</code> directories (which do not exist at the repo root in this checkout) alongside its hook file.</p>
+
+        <pre><code>"skills": "./skills/",
+  "agents": "./agents/",
+  "commands": "./commands/",
+  "hooks": "./hooks/hooks-cursor.json"</code></pre>
+      </section>
+
+      <!-- ============================ RECAP ============================ -->
+      <section class="reveal">
+        <h2 id="recap">The mechanisms, recapped</h2>
+        <p class="section-intro">Four moving parts carry the entire portability story. Strip them down and the architecture fits on a postcard.</p>
+
+        <div class="grid cols-2">
+          <div class="card hover">
+            <h3>Bootstrap injection</h3>
+            <p>A SessionStart event runs the polyglot, which execs <code>hooks/session-start</code>. That script wraps the bootstrap in an <code>&lt;EXTREMELY_IMPORTANT&gt;</code> envelope and prints the JSON shape the current platform consumes — chosen by env-var detection. Gemini does it via <code>@</code>-imports; OpenCode via a cached first-user-message transform.</p>
+          </div>
+          <div class="card hover">
+            <h3>Skill discovery</h3>
+            <p>Skills live as <code>skills/&lt;name&gt;/SKILL.md</code> with "Use when…" frontmatter triggers. Hook-native harnesses auto-discover them; OpenCode appends the path in JS. The bootstrap loads eagerly; every other skill loads lazily on demand.</p>
+          </div>
+          <div class="card hover">
+            <h3>Tool-name mapping</h3>
+            <p>Skill bodies are written only in Claude Code tool names. Each non-Claude harness reads a <code>references/&lt;harness&gt;-tools.md</code> table (or inline map) and substitutes local equivalents at run time — no per-harness skill forks.</p>
+          </div>
+          <div class="card hover">
+            <h3>Lockstep &amp; sync</h3>
+            <p><code>.version-bump.json</code> + <code>bump-version.sh</code> keep six manifests on one version; <code>sync-to-codex-plugin.sh</code> mirrors skills into the OpenAI Codex marketplace fork and opens a PR.</p>
+          </div>
+        </div>
+
+        <div class="pull">One library of Markdown. Six harnesses. The skills are dead weight until the bootstrap makes them <span>auto-trigger</span> — and that single idea is the whole architecture.</div>
+
+        <div class="callout tip">
+          <div class="ic">→</div>
+          <p><strong>Next.</strong> If skills are programs the agent runs, then the skill that <em>writes skills</em> is a program that writes programs. That's the deep cut — <a href="meta-programming.html">Agentic Meta-Programming</a>.</p>
+        </div>
+
+        <div class="divider-label">Source files</div>
+        <div class="grid cols-2">
+          <a class="source-card" href="https://github.com/obra/superpowers/blob/main/CLAUDE.md" target="_blank" rel="noopener">
+            <div class="src-t">CLAUDE.md — contributor guide</div>
+            <div class="src-u">github.com/obra/superpowers</div>
+            <div class="src-d">Defines the two pillars and the "react todo list" acceptance test.</div>
+          </a>
+          <a class="source-card" href="https://github.com/obra/superpowers/tree/main/hooks" target="_blank" rel="noopener">
+            <div class="src-t">hooks/ — session-start &amp; run-hook.cmd</div>
+            <div class="src-u">github.com/obra/superpowers</div>
+            <div class="src-d">The three-way JSON emitter and the CMD/bash polyglot wrapper.</div>
+          </a>
+        </div>
+      </section>
+
+      <div class="pager">
+        <a href="essence.html"><div class="dir">← Prev</div><div class="ttl">The Essence</div></a>
+        <a class="next" href="meta-programming.html"><div class="dir">Next →</div><div class="ttl">Agentic Meta-Programming</div></a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="col footer-brand">
+      <a class="brand" href="index.html"><span class="glyph"><img src="assets/logo.svg" alt=""></span><b>Superpowers</b></a>
+      <p>An agentic skills framework &amp; software-development methodology that gives coding agents a disciplined process — brainstorm, plan, test-drive, review, ship.</p>
+    </div>
+    <div class="col">
+      <h5>The Wiki</h5>
+      <a href="essence.html">The Essence</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="meta-programming.html">Meta-Programming</a>
+      <a href="methods.html">The Methods</a>
+    </div>
+    <div class="col">
+      <h5>Explore</h5>
+      <a href="brainstorming.html">Brainstorming Engine</a>
+      <a href="examples.html">Steps &amp; Examples</a>
+      <a href="use-cases.html">Use Cases</a>
+      <a href="web-use-cases.html">From the Web</a>
+    </div>
+    <div class="col">
+      <h5>Source</h5>
+      <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">GitHub repo</a>
+      <a href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">Original announcement</a>
+      <a href="https://github.com/obra/superpowers/blob/main/RELEASE-NOTES.md" target="_blank" rel="noopener">Release notes</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>Unofficial documentation wiki · built from the v5.1.0 source tree.</span>
+    <span>Superpowers © Jesse Vincent &amp; Prime Radiant · MIT License</span>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

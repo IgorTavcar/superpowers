@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superpowers — The Wiki</title>
+<meta name="description" content="A beautiful field guide to Superpowers: the agentic skills framework and software-development methodology that gives coding agents a disciplined process — brainstorm, plan, test-drive, review, ship.">
+<link rel="icon" href="assets/app-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="glyph"><img src="assets/logo.svg" alt=""></span>
+    <b>Superpowers</b>
+    <span class="tag">WIKI</span>
+  </a>
+  <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="essence.html">Essence</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="meta-programming.html">Meta-Programming</a>
+    <a href="methods.html">Methods</a>
+    <a href="brainstorming.html">Brainstorming</a>
+    <a href="examples.html">Examples</a>
+    <a href="use-cases.html">Use Cases</a>
+    <a href="web-use-cases.html">From the Web</a>
+  </nav>
+  <div class="header-right">
+    <a class="gh-link" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================ HERO ============================ -->
+<section class="home-hero">
+  <div class="home-hero-inner">
+    <span class="eyebrow">Agentic skills framework · development methodology</span>
+    <h1>Give your coding agent<br><span class="grad-text">Superpowers.</span></h1>
+    <p class="lede">A complete software-development methodology for coding agents — built on a library of composable, version-controlled <strong>skills</strong> and a bootstrap that makes the agent actually use them. It doesn't make the model smarter. It makes the model <em>disciplined</em>.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="essence.html">
+        Start with the essence
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-ghost" href="architecture.html">How it's built</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="num">14</div><div class="lbl">composable skills</div></div>
+      <div class="stat"><div class="num">7</div><div class="lbl">agent harnesses</div></div>
+      <div class="stat"><div class="num">0</div><div class="lbl">runtime dependencies</div></div>
+      <div class="stat"><div class="num">v5.1</div><div class="lbl">this wiki's source</div></div>
+    </div>
+  </div>
+  <div class="home-hero-glow" aria-hidden="true"><img src="assets/logo.svg" alt=""></div>
+</section>
+
+<div class="layout no-toc">
+  <div class="content">
+
+    <!-- ============================ WHAT IS IT ============================ -->
+    <section class="reveal">
+      <p class="lead-in">When you start building something, a Superpowers-equipped agent <strong>doesn't jump straight to code.</strong> It steps back and asks what you're really trying to do. It teases a spec out of the conversation, shows it to you in digestible chunks, turns the approved design into a bite-sized plan, and only then writes code — test-first, reviewed task-by-task, verified before it ever claims "done."</p>
+
+      <div class="pull">It's the bet that what AI coding agents lack isn't capability — it's <span>discipline</span>. And that discipline can be distributed as plain Markdown.</div>
+    </section>
+
+    <!-- ============================ THE LOOP ============================ -->
+    <section class="reveal">
+      <h2 id="the-loop">The core loop</h2>
+      <p class="section-intro">Seven skills hand off to each other automatically, forming a closed chain from rough idea to merged code. Each one is a procedure the agent is taught to reach for at exactly the right moment.</p>
+
+      <div class="flow">
+        <div class="node"><div class="n">01</div><div class="t">Brainstorm</div><div class="s">Socratic spec</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="n">02</div><div class="t">Write Plan</div><div class="s">bite-sized TDD tasks</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="n">03</div><div class="t">Isolate</div><div class="s">git worktree</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="n">04</div><div class="t">Execute</div><div class="s">fresh subagent / task</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="n">05</div><div class="t">Review</div><div class="s">spec → quality</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="n">06</div><div class="t">Verify</div><div class="s">evidence, not claims</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="n">07</div><div class="t">Finish</div><div class="s">merge / PR / clean up</div></div>
+      </div>
+
+      <p>Threaded through every implementation step are the discipline rails — <strong>test-driven development</strong> (no production code without a failing test first) and <strong>systematic debugging</strong> (no fixes without a root cause). <a href="methods.html">Explore the methods →</a></p>
+    </section>
+
+    <!-- ============================ EXPLORE THE WIKI ============================ -->
+    <section class="reveal">
+      <h2 id="explore">Explore the wiki</h2>
+      <p class="section-intro">Nine pages, written for the curious — whether you build the repo, architect systems, brainstorm like a maniac, or just want to understand what all the fuss is about.</p>
+
+      <div class="grid cols-3">
+        <a class="card hover navcard" href="essence.html">
+          <div class="ico">✦</div>
+          <span class="step">01 · The big idea</span>
+          <h3>The Essence</h3>
+          <p>Where Superpowers came from, what it believes, and the mantra at its heart: <em>"Why am I doing this?"</em></p>
+          <span class="more">Read →</span>
+        </a>
+        <a class="card hover navcard" href="architecture.html">
+          <div class="ico">⚙</div>
+          <span class="step">02 · How it's built</span>
+          <h3>Architecture</h3>
+          <p>One zero-dependency skill library, seven harnesses, and a session-start bootstrap that ties it all together.</p>
+          <span class="more">Read →</span>
+        </a>
+        <a class="card hover navcard" href="meta-programming.html">
+          <div class="ico">↻</div>
+          <span class="step">03 · The deep cut</span>
+          <h3>Agentic Meta-Programming</h3>
+          <p>Skills are code that shapes behavior — and <code>writing-skills</code> is a program that writes programs.</p>
+          <span class="more">Read →</span>
+        </a>
+        <a class="card hover navcard" href="methods.html">
+          <div class="ico">▤</div>
+          <span class="step">04 · The playbook</span>
+          <h3>The Methods</h3>
+          <p>The full lifecycle: brainstorm, plan, isolate, execute, review, verify, finish — plus TDD and debugging.</p>
+          <span class="more">Read →</span>
+        </a>
+        <a class="card hover navcard" href="brainstorming.html">
+          <div class="ico">◐</div>
+          <span class="step">05 · The fun part</span>
+          <h3>Brainstorming Engine</h3>
+          <p>One question at a time — and a zero-dependency live browser companion that streams mockups as you talk.</p>
+          <span class="more">Read →</span>
+        </a>
+        <a class="card hover navcard" href="examples.html">
+          <div class="ico">❯</div>
+          <span class="step">06 · Show me</span>
+          <h3>Steps &amp; Examples</h3>
+          <p>The actual templates, prompts, and command blocks — a TDD task, a two-stage review, a finished branch.</p>
+          <span class="more">Read →</span>
+        </a>
+        <a class="card hover navcard" href="use-cases.html">
+          <div class="ico">◇</div>
+          <span class="step">07 · What it's for</span>
+          <h3>Use Cases</h3>
+          <p>From big multi-file features to flaky-test fan-out and "why is my <code>.git</code> in the wrong folder?"</p>
+          <span class="more">Read →</span>
+        </a>
+        <a class="card hover navcard" href="web-use-cases.html">
+          <div class="ico">◎</div>
+          <span class="step">08 · The reception</span>
+          <h3>From the Web</h3>
+          <p>Rave reviews, sharp skepticism, the 94% slop-PR problem, and how people stack it with other tools.</p>
+          <span class="more">Read →</span>
+        </a>
+        <a class="card hover navcard" href="methods.html#catalog">
+          <div class="ico">≡</div>
+          <span class="step">Reference</span>
+          <h3>All 14 Skills</h3>
+          <p>The complete catalog — each skill's trigger, mechanic, and how it chains to the next.</p>
+          <span class="more">Browse →</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============================ VOICES ============================ -->
+    <section class="reveal">
+      <h2 id="voices">In a few voices</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <p style="font-style:italic;color:var(--fg-soft)">"Skills are what give your agents Superpowers… magic words that make your agent behave differently, even without you asking directly."</p>
+          <p class="k" style="margin-top:14px">— Jesse Vincent, creator</p>
+        </div>
+        <div class="card">
+          <p style="font-style:italic;color:var(--fg-soft)">"So much more productive and the features it builds are so much more correct than with stock Claude Code."</p>
+          <p class="k" style="margin-top:14px">— Evan Schwartz, "A Rave Review"</p>
+        </div>
+        <div class="card">
+          <p style="font-style:italic;color:var(--fg-soft)">"One of the most creative users of coding agents that I know… way ahead of the curve."</p>
+          <p class="k" style="margin-top:14px">— Simon Willison</p>
+        </div>
+      </div>
+      <p style="margin-top:22px;color:var(--muted)">It's not universally loved — skeptics call the full ceremony overkill for small fixes, and it can be token-hungry. The honest, both-sides version lives on <a href="web-use-cases.html">From the Web</a>.</p>
+    </section>
+
+    <div class="pager">
+      <a class="next" href="essence.html">
+        <div class="dir">Begin →</div>
+        <div class="ttl">The Essence</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="col footer-brand">
+      <a class="brand" href="index.html"><span class="glyph"><img src="assets/logo.svg" alt=""></span><b>Superpowers</b></a>
+      <p>An agentic skills framework &amp; software-development methodology that gives coding agents a disciplined process — brainstorm, plan, test-drive, review, ship.</p>
+    </div>
+    <div class="col">
+      <h5>The Wiki</h5>
+      <a href="essence.html">The Essence</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="meta-programming.html">Meta-Programming</a>
+      <a href="methods.html">The Methods</a>
+    </div>
+    <div class="col">
+      <h5>Explore</h5>
+      <a href="brainstorming.html">Brainstorming Engine</a>
+      <a href="examples.html">Steps &amp; Examples</a>
+      <a href="use-cases.html">Use Cases</a>
+      <a href="web-use-cases.html">From the Web</a>
+    </div>
+    <div class="col">
+      <h5>Source</h5>
+      <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">GitHub repo</a>
+      <a href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">Original announcement</a>
+      <a href="https://github.com/obra/superpowers/blob/main/RELEASE-NOTES.md" target="_blank" rel="noopener">Release notes</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>Unofficial documentation wiki · built from the v5.1.0 source tree.</span>
+    <span>Superpowers © Jesse Vincent &amp; Prime Radiant · MIT License</span>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

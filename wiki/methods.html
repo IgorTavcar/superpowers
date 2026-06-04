@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Methods — Superpowers Wiki</title>
+<meta name="description" content="The complete Superpowers development methodology and the full catalog of all 14 skills: brainstorm, plan, isolate, execute, review, verify, finish — plus TDD and systematic debugging.">
+<link rel="icon" href="assets/app-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="glyph"><img src="assets/logo.svg" alt=""></span>
+    <b>Superpowers</b>
+    <span class="tag">WIKI</span>
+  </a>
+  <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="essence.html">Essence</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="meta-programming.html">Meta-Programming</a>
+    <a href="methods.html">Methods</a>
+    <a href="brainstorming.html">Brainstorming</a>
+    <a href="examples.html">Examples</a>
+    <a href="use-cases.html">Use Cases</a>
+    <a href="web-use-cases.html">From the Web</a>
+  </nav>
+  <div class="header-right">
+    <a class="gh-link" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.3.8 1 .8 2.1v3.1c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">On this page</div>
+      <a href="#the-loop">The end-to-end loop</a>
+      <a href="#brainstorm">Brainstorming → spec</a>
+      <a href="#plans">Writing plans → TDD tasks</a>
+      <a href="#worktrees">Isolate with worktrees</a>
+      <a href="#subagents">Subagents &amp; two-stage review</a>
+      <a href="#rails">Discipline rails</a>
+      <a href="#finish">Verify, review, finish</a>
+      <a href="#catalog">The complete catalog</a>
+    </aside>
+    <div class="content">
+      <div class="hero">
+        <span class="eyebrow">Page 04 · The playbook</span>
+        <h1 class="page-title">The <span class="grad-text">Methods</span></h1>
+        <p class="lede">This is the full machinery. Fourteen plain-Markdown skills hand off to one another through explicit <code>REQUIRED SUB-SKILL</code> declarations and terminal states, forming a deterministic chain that carries an idea from rough conversation to merged code — never skipping a gate. Below: the lifecycle, the discipline rails that run through every step, and a reference catalog of all fourteen skills.</p>
+      </div>
+
+      <!-- ============================ THE LOOP ============================ -->
+      <section class="reveal">
+        <h2 id="the-loop">The end-to-end loop</h2>
+        <p class="section-intro">Each skill knows what comes next. The handoffs aren't convention or hope — they're wired by name. <code>brainstorming</code> declares its only legal successor; <code>writing-plans</code> stamps every plan with the executor it requires; both executors call the same finishing skill. The result is a closed, auditable chain.</p>
+
+        <div class="flow">
+          <div class="node"><div class="n">01</div><div class="t">Brainstorm</div><div class="s">approved spec</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">02</div><div class="t">Write Plan</div><div class="s">bite-sized TDD</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">03</div><div class="t">Isolate</div><div class="s">git worktree</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">04</div><div class="t">Execute</div><div class="s">subagent / inline</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">05</div><div class="t">Review</div><div class="s">spec → quality</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">06</div><div class="t">Verify</div><div class="s">fresh evidence</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">07</div><div class="t">Finish</div><div class="s">merge / PR / clean</div></div>
+        </div>
+
+        <p>Skills reference each other with the <code>superpowers:skill-name</code> convention and bold handoff markers — never <code>@</code>-file links, which would force-load context before it's needed. A <strong>terminal state</strong> says where a skill is allowed to go next; a <code>REQUIRED SUB-SKILL</code> says where it <em>must</em> go. Threaded underneath every implementation step are the two discipline rails — <strong>test-driven development</strong> and <strong>systematic debugging</strong> — plus the honesty gate, <strong>verification-before-completion</strong>, in front of every claim of "done."</p>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>One chain, two layers.</strong> The catalog splits cleanly: <em>lifecycle skills</em> form the linear happy path, while <em>discipline rails</em> and <em>meta skills</em> are invoked by name from inside other workflows rather than sitting in the line.</p></div>
+      </section>
+
+      <!-- ============================ BRAINSTORM ============================ -->
+      <section class="reveal">
+        <h2 id="brainstorm">Brainstorming → an approved spec</h2>
+        <p class="section-intro">The loop starts by refusing to start. Before a single line of code, <code>brainstorming</code> teases a design out of conversation — one question at a time — and writes it to <code>docs/superpowers/specs/YYYY-MM-DD-&lt;topic&gt;-design.md</code>, committed, only after you approve it.</p>
+
+        <p>This is enforced as a <strong>HARD-GATE</strong>. There is no "this is too simple to need a design" escape hatch — the skill carries an explicit anti-pattern rejecting exactly that rationalization:</p>
+
+        <blockquote>"Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it."<cite>brainstorming/SKILL.md (HARD-GATE)</cite></blockquote>
+
+        <p>The nine-item checklist runs: explore context, offer a visual companion, ask clarifying questions one at a time, propose two or three approaches, present the design in sections (approval after each), write and commit the spec, run a spec self-review (a placeholder, consistency, scope, and ambiguity scan, fixed inline), let you review the written spec — and only then transition out. And it can transition exactly one way:</p>
+
+        <blockquote>"The terminal state is invoking writing-plans. Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans."<cite>brainstorming/SKILL.md</cite></blockquote>
+
+        <div class="callout tip"><div class="ic">✓</div><p><strong>Why so strict?</strong> A locked terminal state means the agent can't quietly drift from "let's design this" into "I've already half-built it." The gate buys you a real, reviewed spec every time. The full mechanics live on the <a href="brainstorming.html">Brainstorming Engine</a> page.</p></div>
+      </section>
+
+      <!-- ============================ PLANS ============================ -->
+      <section class="reveal">
+        <h2 id="plans">Writing plans → bite-sized TDD tasks</h2>
+        <p class="section-intro"><code>writing-plans</code> turns the approved spec into an implementation plan written for an engineer with <em>zero</em> codebase context, saved to <code>docs/superpowers/plans/YYYY-MM-DD-&lt;feature&gt;.md</code>. The unit of work is deliberately tiny: every step is one action that takes two to five minutes.</p>
+
+        <p>Each task follows a fixed five-step TDD template — and the steps <em>are</em> the test-first cycle, baked into the document so an executing agent literally follows the rhythm:</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">writing-plans/SKILL.md · Task Structure</span><button class="copy-btn">copy</button></div>
+        <pre><code>### Task N: [Component Name]
+
+**Files:**
+- Create: `exact/path/to/file.py`
+- Modify: `exact/path/to/existing.py:123-145`
+- Test: `tests/exact/path/to/test.py`
+
+- [ ] **Step 1: Write the failing test**
+- [ ] **Step 2: Run test to verify it fails**
+- [ ] **Step 3: Write minimal implementation**
+- [ ] **Step 4: Run test to verify it passes**
+- [ ] **Step 5: Commit**</code></pre>
+
+        <p>Every plan must open with a mandatory header that re-declares the executor for whatever agent picks it up later — the handoff is written into the document itself:</p>
+
+        <blockquote>"REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task."<cite>writing-plans/SKILL.md (mandatory plan header)</cite></blockquote>
+
+        <p>A <strong>"No Placeholders"</strong> rule bans <code>TBD</code>, <code>TODO</code>, "add appropriate error handling," "Similar to Task N," and references to undefined types — the plan must be fully specified, not a sketch. Finally a three-point <strong>self-review</strong> (spec coverage, placeholder scan, type and signature consistency) reads the plan against the spec with fresh eyes, and an Execution Handoff offers the two paths: subagent-driven (recommended) or inline.</p>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>Never on <code>main</code>.</strong> Plans are never executed on <code>main</code>/<code>master</code> without explicit user consent — which is exactly why isolation comes next.</p></div>
+      </section>
+
+      <!-- ============================ WORKTREES ============================ -->
+      <section class="reveal">
+        <h2 id="worktrees">Isolate with git worktrees</h2>
+        <p class="section-intro">Before execution, <code>using-git-worktrees</code> guarantees an isolated workspace — but it leads with detection, not creation. <strong>Step 0</strong> compares <code>GIT_DIR</code> against <code>GIT_COMMON</code> (with a submodule guard via <code>git rev-parse --show-superproject-working-tree</code>) to notice when the work is already isolated, and skips creation if so.</p>
+
+        <p>The governing rule is blunt: <strong>never fight the harness.</strong> If the platform offers a native worktree tool (<code>EnterWorktree</code>, <code>/worktree</code>, a <code>--worktree</code> flag), the skill prefers it over a manual <code>git worktree add</code>, because:</p>
+
+        <blockquote>"Using git worktree add when you have a native tool creates phantom state your harness can't see or manage."<cite>using-git-worktrees/SKILL.md (Step 1a)</cite></blockquote>
+
+        <p>Only as a fallback does it reach for raw git — and even then with guardrails. It picks a directory by priority (user preference &gt; existing <code>.worktrees/</code> &gt; <code>worktrees/</code> &gt; the global legacy location &gt; default <code>.worktrees/</code>), then runs a mandatory <code>git check-ignore</code> safety verification so the new worktree directory can't pollute the tree. If sandbox permissions block creation, it falls back to working in place.</p>
+
+        <ol class="steps">
+          <li><h4>Detect</h4><p>Compare <code>GIT_DIR</code> ≠ <code>GIT_COMMON</code>, with a submodule guard. Already isolated? Skip ahead.</p></li>
+          <li><h4>Create (native first)</h4><p>Prefer the harness's own worktree tool; fall back to a gitignore-verified <code>git worktree add</code>.</p></li>
+          <li><h4>Set up</h4><p>Auto-detect and run project setup — <code>npm</code>, <code>cargo</code>, <code>pip</code>, <code>poetry</code>, <code>go</code>.</p></li>
+          <li><h4>Baseline</h4><p>Confirm a clean test baseline <em>before</em> implementing anything, so later failures are unambiguously yours.</p></li>
+        </ol>
+      </section>
+
+      <!-- ============================ SUBAGENTS ============================ -->
+      <section class="reveal">
+        <h2 id="subagents">Subagent-driven development &amp; the two-stage review</h2>
+        <p class="section-intro">The recommended executor is <code>subagent-driven-development</code>: the controller reads the plan once, extracts every task's full text and context into <code>TodoWrite</code>, then dispatches a <strong>fresh implementer subagent per task</strong>. Crucially, the controller pastes the full task text into the prompt — it never makes the subagent read the plan file.</p>
+
+        <div class="pull">Fresh subagent per task + two-stage review (spec then quality) = <span>high quality, fast iteration.</span></div>
+
+        <p>The defining mechanic is the <strong>order of review</strong>. After an implementer reports back, a <strong>spec-compliance reviewer runs FIRST</strong> — did it build exactly what was asked, nothing more, nothing less? Only once spec compliance is clean does a <strong>code-quality reviewer run SECOND</strong> — is it well-built? Each reviewer triggers a fix-and-re-review loop on the same implementer subagent until it's green. Running quality before spec is an explicit Red Flag.</p>
+
+        <div class="flow">
+          <div class="node"><div class="n">A</div><div class="t">Implement</div><div class="s">fresh subagent</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">B</div><div class="t">Spec review</div><div class="s">built the right thing?</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">C</div><div class="t">Quality review</div><div class="s">built it well?</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="n">D</div><div class="t">Task done</div><div class="s">both ✅</div></div>
+        </div>
+
+        <p>The spec reviewer is instructed to be paranoid. Its prompt opens by telling it not to trust the implementer's own account:</p>
+
+        <blockquote>"The implementer finished suspiciously quickly. Their report may be incomplete, inaccurate, or optimistic. You MUST verify everything independently."<cite>subagent-driven-development/spec-reviewer-prompt.md</cite></blockquote>
+
+        <p>It does that by reading the actual code line-by-line for missing requirements, extra unrequested work, and misunderstandings, returning ✅ or ❌ with <code>file:line</code>. Three sibling prompt files encode the whole dance: <code>implementer-prompt.md</code>, <code>spec-reviewer-prompt.md</code>, and <code>code-quality-reviewer-prompt.md</code> (which itself reuses the shared <code>code-reviewer.md</code> template). Implementers report one of four statuses:</p>
+
+        <div class="grid cols-4">
+          <div class="card"><h3>DONE</h3><p>Task complete, tests pass, committed and self-reviewed.</p></div>
+          <div class="card"><h3>DONE_WITH_CONCERNS</h3><p>Finished, but flags something worth a second look.</p></div>
+          <div class="card"><h3>NEEDS_CONTEXT</h3><p>Missing information it can't safely guess at — asks rather than invents.</p></div>
+          <div class="card"><h3>BLOCKED</h3><p>Cannot proceed. Bad work is worse than no work.</p></div>
+        </div>
+
+        <p>The skill also offers model-selection guidance — a cheap model for one-or-two-file mechanical tasks, a capable one for architecture and review — and forbids dispatching multiple implementers in parallel for the same plan. For platforms without strong subagent support there's an inline alternative, <code>executing-plans</code>: load the plan, review it critically and raise concerns <em>before</em> starting, <code>TodoWrite</code>, execute each bite-sized step exactly, run all verifications, then hand off to finishing. It announces itself at the start and openly recommends switching to subagent-driven-development when subagents are available.</p>
+      </section>
+
+      <!-- ============================ RAILS ============================ -->
+      <section class="reveal">
+        <h2 id="rails">Discipline rails</h2>
+        <p class="section-intro">Two skills run through every implementation step as always-on guardrails. Both are framed as <strong>Iron Laws</strong> with rationalization tables, so an agent can't reason its way out under pressure.</p>
+
+        <div class="divider-label">Rail one · Test-driven development</div>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>The Iron Law.</strong> NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST.</p></div>
+
+        <p>The cycle is RED → Verify-Red → GREEN → Verify-Green → REFACTOR, and the two <em>verify</em> steps are mandatory. Watching the test fail isn't optional ceremony — it's the only proof the test tests the right thing:</p>
+
+        <blockquote>"If you didn't watch the test fail, you don't know if it tests the right thing."<cite>test-driven-development/SKILL.md</cite></blockquote>
+
+        <p>Wrote code before its test? The rule is uncompromising — <strong>delete it.</strong> "Delete means delete," with no keeping it around "as reference." Verify-Red requires the test to fail for the <em>right reason</em> (a real assertion failure, not an error); Verify-Green requires it to pass with all other tests green and pristine output. This is why <code>writing-plans</code> bakes the five-step cycle into every task and why subagents are explicitly told to use it.</p>
+
+        <div class="divider-label">Rail two · Systematic debugging</div>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>The Iron Law.</strong> NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST.</p></div>
+
+        <p>When anything breaks, four phases funnel toward the actual cause instead of stacking fixes on symptoms:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Phase</th><th>What happens</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1 · Root cause</strong></td><td>Read the errors, reproduce, check recent changes, instrument each component boundary, trace data flow.</td></tr>
+              <tr><td><strong>2 · Pattern analysis</strong></td><td>Find a working example, read the reference completely, list every difference.</td></tr>
+              <tr><td><strong>3 · Hypothesis</strong></td><td>Form a single specific hypothesis; test it with the smallest change, one variable at a time.</td></tr>
+              <tr><td><strong>4 · Implementation</strong></td><td>Write a failing test FIRST (via TDD), apply ONE fix, verify.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Phase 4 carries an escalation rule. If a fix fails and you've tried fewer than three times, return to Phase 1 with the new information. But:</p>
+
+        <blockquote>"If ≥ 3: STOP and question the architecture. This is NOT a failed hypothesis — this is a wrong architecture."<cite>systematic-debugging/SKILL.md (Phase 4)</cite></blockquote>
+
+        <p>A companion technique, <code>root-cause-tracing.md</code>, teaches tracing <em>backward</em> from a deep symptom up the call stack to the original trigger — <strong>"NEVER fix just where the error appears"</strong> — then adding defense-in-depth at each layer so the bug becomes impossible. When manual tracing dead-ends, it instruments with <code>new Error().stack</code> before the dangerous operation and bisects with a shell tool to find which test pollutes shared state:</p>
+
+        <pre><code>./find-polluter.sh '.git' 'src/**/*.test.ts'</code></pre>
+
+        <p>In one worked example, a stray <code>.git</code> directory was traced through five levels to a test fixture returning an empty <code>tempDir</code> — and the source fix plus four layers of defense-in-depth produced 1847 passing tests with zero pollution.</p>
+      </section>
+
+      <!-- ============================ FINISH ============================ -->
+      <section class="reveal">
+        <h2 id="finish">Verify, review, finish</h2>
+        <p class="section-intro">Three skills guard the exit. They share a theme: assertions must be backed by evidence, feedback must be evaluated on its merits, and a branch isn't done until you've chosen what to do with it.</p>
+
+        <div class="divider-label">The honesty gate</div>
+
+        <p><code>verification-before-completion</code> sits in front of every "complete," "fixed," or "passing" — including trusting a subagent's success report.</p>
+
+        <div class="callout warn"><div class="ic">!</div><p><strong>The Iron Law.</strong> NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE — if you haven't run the verification command in this message, you cannot claim it passes.</p></div>
+
+        <p>Its five-step Gate Function — IDENTIFY the proving command, RUN it fresh and in full, READ the output and exit code and failure count, VERIFY the output actually confirms the claim, THEN claim — treats skipping any step as dishonesty. Agent delegation is never trusted on the agent's word; the controller checks the VCS diff instead. And a regression test isn't "added" until it survives a full red-green cycle:</p>
+
+        <pre><code>Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)</code></pre>
+
+        <div class="divider-label">Receiving review</div>
+
+        <p>The review loop has two mirrored skills. <code>requesting-code-review</code> dispatches a Senior Code Reviewer subagent over an explicit SHA range with the <code>code-reviewer.md</code> template, and acts on findings by severity — fix Critical immediately, Important before proceeding, note Minor. The reviewer is told to calibrate, not catastrophize:</p>
+
+        <blockquote>"Categorize issues by actual severity. Not everything is Critical. Acknowledge what was done well before listing issues — accurate praise helps the implementer trust the rest of the feedback."<cite>requesting-code-review/code-reviewer.md</cite></blockquote>
+
+        <p>Its mirror, <code>receiving-code-review</code>, governs how feedback is taken: a six-step pattern (READ → UNDERSTAND → VERIFY → EVALUATE → RESPOND → IMPLEMENT, one item at a time), a YAGNI grep before implementing any "professional" feature an external reviewer suggests, and push-back with technical reasoning when the reviewer is wrong. It bans performative agreement outright:</p>
+
+        <div class="callout note"><div class="ic">★</div><p><strong>No reflexive flattery.</strong> "You're absolutely right!", "Great point!", and any gratitude are forbidden. <em>"If you catch yourself about to write 'Thanks': DELETE IT. State the fix instead."</em></p></div>
+
+        <div class="divider-label">Finishing the branch</div>
+
+        <p><code>finishing-a-development-branch</code> closes the loop. It verifies tests pass (stopping if they don't), detects the environment via <code>GIT_DIR</code> vs <code>GIT_COMMON</code>, determines the base branch with <code>git merge-base</code>, and presents <strong>exactly four options</strong> (three for a detached HEAD, where merge is dropped):</p>
+
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">finishing-a-development-branch/SKILL.md · the menu</span><button class="copy-btn">copy</button></div>
+        <pre><code>Implementation complete. What would you like to do?
+
+1. Merge back to &lt;base-branch&gt; locally
+2. Push and create a Pull Request
+3. Keep the branch as-is (I'll handle it later)
+4. Discard this work</code></pre>
+
+        <p>Each path is precise: merging <code>cd</code>s to the main root, checks out the base, pulls, merges, re-runs tests, then cleans up; the PR path uses <code>gh pr create</code> with a heredoc Summary / Test Plan body and deliberately does <em>not</em> remove the worktree; discard requires you to type the word <code>discard</code>. Cleanup runs only for merge and discard, and only on <strong>provenance-owned</strong> worktrees — those under <code>.worktrees/</code>, <code>worktrees/</code>, or <code>~/.config/superpowers/worktrees/</code> — via <code>git worktree remove</code> and <code>prune</code> from the main root. It never touches a harness-owned workspace, and never deletes a branch before removing its worktree.</p>
+      </section>
+
+      <!-- ============================ CATALOG ============================ -->
+      <section class="reveal">
+        <h2 id="catalog">The complete catalog</h2>
+        <p class="section-intro">All fourteen skills, grouped by role. Each tile's description is the verbatim <code>WHEN-to-use</code> line from that skill's frontmatter — which, per the <code>writing-skills</code> convention, describes <em>when</em> to reach for the skill and never summarizes its workflow.</p>
+
+        <div class="tag-row"><span class="pill">14 skills</span><span class="pill accent">Lifecycle</span><span class="pill accent">Discipline rails</span><span class="pill accent">Review &amp; coordination</span><span class="pill accent">Meta</span></div>
+
+        <div class="divider-label">Lifecycle · the happy path</div>
+        <div class="grid cols-2">
+          <div class="card"><div class="skill"><div class="badge">B</div><div><div class="name">brainstorming</div><div class="desc">Use when you must use this before any creative work — creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation.</div></div></div></div>
+          <div class="card"><div class="skill"><div class="badge">W</div><div><div class="name">writing-plans</div><div class="desc">Use when you have a spec or requirements for a multi-step task, before touching code.</div></div></div></div>
+          <div class="card"><div class="skill"><div class="badge">U</div><div><div class="name">using-git-worktrees</div><div class="desc">Use when starting feature work that needs isolation from current workspace or before executing implementation plans — ensures an isolated workspace exists via native tools or git worktree fallback.</div></div></div></div>
+          <div class="card"><div class="skill"><div class="badge">S</div><div><div class="name">subagent-driven-development</div><div class="desc">Use when executing implementation plans with independent tasks in the current session.</div></div></div></div>
+          <div class="card"><div class="skill"><div class="badge">E</div><div><div class="name">executing-plans</div><div class="desc">Use when you have a written implementation plan to execute in a separate session with review checkpoints.</div></div></div></div>
+          <div class="card"><div class="skill"><div class="badge">F</div><div><div class="name">finishing-a-development-branch</div><div class="desc">Use when implementation is complete, all tests pass, and you need to decide how to integrate the work — guides completion of development work by presenting structured options for merge, PR, or cleanup.</div></div></div></div>
+        </div>
+
+        <div class="divider-label">Discipline rails · always on</div>
+        <div class="grid cols-2">
+          <div class="card"><div class="skill"><div class="badge">T</div><div><div class="name">test-driven-development</div><div class="desc">Use when implementing any feature or bugfix, before writing implementation code.</div></div></div></div>
+          <div class="card"><div class="skill"><div class="badge">S</div><div><div class="name">systematic-debugging</div><div class="desc">Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes.</div></div></div></div>
+          <div class="card"><div class="skill"><div class="badge">V</div><div><div class="name">verification-before-completion</div><div class="desc">Use when about to claim work is complete, fixed, or passing, before committing or creating PRs — requires running verification commands and confirming output before making any success claims; evidence before assertions always.</div></div></div></div>
+        </div>
+
+        <div class="divider-label">Review &amp; coordination</div>
+        <div class="grid cols-2">
+          <div class="card"><div class="skill"><div class="badge">R</div><div><div class="name">requesting-code-review</div><div class="desc">Use when completing tasks, implementing major features, or before merging to verify work meets requirements.</div></div></div></div>
+          <div class="card"><div class="skill"><div class="badge">R</div><div><div class="name">receiving-code-review</div><div class="desc">Use when receiving code review feedback, before implementing suggestions, especially if feedback seems unclear or technically questionable — requires technical rigor and verification, not performative agreement or blind implementation.</div></div></div></div>
+          <div class="card"><div class="skill"><div class="badge">D</div><div><div class="name">dispatching-parallel-agents</div><div class="desc">Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies.</div></div></div></div>
+        </div>
+
+        <div class="divider-label">Meta · the self-hosting layer</div>
+        <div class="grid cols-2">
+          <div class="card"><div class="skill"><div class="badge">U</div><div><div class="name">using-superpowers</div><div class="desc">Use when starting any conversation — establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions.</div></div></div></div>
+          <div class="card"><div class="skill"><div class="badge">W</div><div><div class="name">writing-skills</div><div class="desc">Use when creating new skills, editing existing skills, or verifying skills work before deployment.</div></div></div></div>
+        </div>
+
+        <p style="margin-top:24px">The two meta skills bracket everything else. <code>using-superpowers</code> is the bootstrap that forces a skill check "before any response or action, even a 1% chance it applies," and sets the priority order — user instructions &gt; skills &gt; system prompt. <code>writing-skills</code> is the reflexive authoring skill that produced every <code>SKILL.md</code> by applying TDD to documentation itself ("NO SKILL WITHOUT A FAILING TEST FIRST"). Its dive lives on <a href="meta-programming.html">Agentic Meta-Programming</a>; for the templates and command blocks in the flesh, see <a href="examples.html">Steps &amp; Examples</a>.</p>
+      </section>
+
+      <div class="pager">
+        <a href="meta-programming.html"><div class="dir">← Prev</div><div class="ttl">Agentic Meta-Programming</div></a>
+        <a class="next" href="brainstorming.html"><div class="dir">Next →</div><div class="ttl">The Brainstorming Engine</div></a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="col footer-brand">
+      <a class="brand" href="index.html"><span class="glyph"><img src="assets/logo.svg" alt=""></span><b>Superpowers</b></a>
+      <p>An agentic skills framework &amp; software-development methodology that gives coding agents a disciplined process — brainstorm, plan, test-drive, review, ship.</p>
+    </div>
+    <div class="col">
+      <h5>The Wiki</h5>
+      <a href="essence.html">The Essence</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="meta-programming.html">Meta-Programming</a>
+      <a href="methods.html">The Methods</a>
+    </div>
+    <div class="col">
+      <h5>Explore</h5>
+      <a href="brainstorming.html">Brainstorming Engine</a>
+      <a href="examples.html">Steps &amp; Examples</a>
+      <a href="use-cases.html">Use Cases</a>
+      <a href="web-use-cases.html">From the Web</a>
+    </div>
+    <div class="col">
+      <h5>Source</h5>
+      <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">GitHub repo</a>
+      <a href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">Original announcement</a>
+      <a href="https://github.com/obra/superpowers/blob/main/RELEASE-NOTES.md" target="_blank" rel="noopener">Release notes</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>Unofficial documentation wiki · built from the v5.1.0 source tree.</span>
+    <span>Superpowers © Jesse Vincent &amp; Prime Radiant · MIT License</span>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
